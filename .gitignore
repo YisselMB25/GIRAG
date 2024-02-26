@@ -11,3 +11,7 @@ ad.js
 TODO
 test.html
 .vscode/
+vendor/*
+img/casos_docs/*
+temp
+temp/*

@@ -5,6 +5,6 @@
 ?>
 
 <p>
-<a href="http://www.e-integracion.com">E-Integraci&oacute;n</a><br>
-&copy; 2015 &nbsp;&nbsp; 
+<a href="http://www.grupoitemu.com">Grupo Itemu</a><br>
+&copy; 2024 &nbsp;&nbsp; 
 </p>

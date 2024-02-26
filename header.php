@@ -2,7 +2,7 @@
 $qsql ="select * from menu a, menu_roles b 
 where a.menu_id=b.menu_id
 AND b.usti_id=$rol
-order by mema_id, menu_orden";
+order by mema_id, menu_nombre";
 
 //echo $qsql;
 
