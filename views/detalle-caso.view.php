@@ -66,10 +66,6 @@
                                              </select>
                                           </div>
                                           <div class="form-group">
-                                             <label for="fecha_cierre" class="col-form-label">Fecha de cierre</label>
-                                             <input type="date" class="form-control" id="fecha_cierre" name="fecha_cierre" placeholder="Agregar fecha">
-                                          </div>
-                                          <div class="form-group">
                                              <label for="descripcion" class="col-form-label">Descripción</label>
                                              <textarea class="form-control" id="descripcion" name="descripcion"></textarea>
                                           </div>
@@ -89,8 +85,53 @@
                               <!-- /.modal-dialog -->
                            </div>
                            <!-- /.modal -->
+
+                           <!-- Modal detalles de cada tarea como los documentos -->
+                           <div class="modal fade" id="modal_detail_task">
+                              <div class="modal-dialog">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h4 class="modal-title">Detalles de tarea</h4>
+                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                       </button>
+                                    </div>
+                                    <div class="modal-body" id="modal-body">
+
+                                       <table class="table table-sm">
+                                          <thead>
+                                             <tr>
+                                                <th>Nombre del archivo</th>
+                                                <th></th>
+                                             </tr>
+                                          </thead>
+                                          <tbody id='table_body_docs'>
+
+                                          </tbody>
+                                       </table>
+
+                                       <form id="form_new_doc" class="my-3">
+                                          <input type="hidden" id="tarea_id" name="tarea_id">
+                                          <div class="custom-file">
+                                             <input type="file" class="custom-file-input" id="archivos" placeholder="Buscar documentos" name="new_docs[]" multiple>
+                                             <label class="custom-file-label" for="archivos">Agregar archivos</label>
+                                          </div>
+                                       </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                       <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                       <button type="button" class="btn btn-primary" onclick="agregarDoc()">Guardar</button>
+                                    </div>
+                                 </div>
+                                 <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                           </div>
+                           <!-- /.modal -->
                         </span>
                         <hr>
+
+                        <!-- Task section -->
                         <div id="task_section">
 
                         </div>
@@ -125,7 +166,10 @@
 </main>
 
 <script>
-   agregarTarea = () => {
+   //Funcion que me agrega una tarea
+   function agregarTarea(){
+      const formTask = document.getElementById("form_nueva_tarea")
+      const modalBackDrop = document.querySelector(".modal-backdrop")
       const taskData = new FormData($("#form_task")[0])
 
       $.ajax({
@@ -136,11 +180,14 @@
          processData: false,
          success: data => {
             obtenerTareas()
+            formTask.style.display = "none"
+            modalBackDrop.style.display = "none"
          }
       })
    }
 
-   obtenerTareas = () => {
+   //Funcion que me trae todas las tareas
+   function obtenerTareas(){
       const taskSection = document.getElementById("task_section")
       const caso_id = $("#caso_id").val()
       let html = ""
@@ -173,37 +220,124 @@
                   <p>
                      ${task.cate_descripcion}
                   </p>
-                  <p>
-                     <a class='text-underline' href='tarea-detalle.php?tarea=${task.cate_id}'>Detalle</a>
-                  </p>
+                  <button class='btn' data-toggle="modal" data-target="#modal_detail_task" onclick='getDocsTask(${task.cate_id})'>
+                     <ins>Ver documentos</ins>
+                  </button>
+                  
                   </div>
                `
                });
 
                taskSection.innerHTML = html
-               let btnDlts = document.querySelectorAll(".dlt-btn")
+               html = ""
 
-               btnDlts.forEach(btn => {
-                  btn.addEventListener("click", () => {
-                     $.ajax({
-                        type: "DELETE",
-                        url: "ajax/tareas.php",
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                           tarea_id: btn.dataset.id
-                        }),
-                        success: (response) => {
-                           console.log(response)
-                           obtenerTareas()
-                        }
-                     })
-                  })
-               })
-            }else{
+            } else {
                taskSection.innerHTML = `<h2 class='text-center'>No hay tareas para este caso</h2>`
             }
+         },
+         complete: () => {
+            let btnDlts = document.querySelectorAll(".dlt-btn")
+
+            //Funcion que elimina la tarea por completo------------------------------
+            btnDlts.forEach(btn => {
+               btn.addEventListener("click", () => {
+                  taskId.val(btn.dataset.id)
+                  $.ajax({
+                     type: "DELETE",
+                     url: "ajax/tareas.php",
+                     contentType: "application/json",
+                     data: JSON.stringify({
+                        tarea_id: btn.dataset.id
+                     }),
+                     success: (response) => {
+                        console.log(response)
+                     },
+                     complete: () => {
+                        obtenerTareas()
+                     }
+                  })
+               })
+            })
          }
       })
    }
    obtenerTareas()
+
+   //Funcion que me agrega un documento a la tarea ----------------------------
+   const taskIdInput = $("#tarea_id")
+   
+   function agregarDoc(){
+      let formDocTask = $("#form_new_doc")
+      let docData = new FormData(formDocTask[0])
+
+      $.ajax({
+         type: "POST",
+         url: "ajax/tareas_docs.php",
+         data: docData,
+         contentType: false,
+         processData: false,
+         success: (res) => {
+            console.log(res)
+         },
+         complete: () => {
+            getDocsTask(taskIdInput.val())
+         }
+      })
+   }
+
+   // Funcion que elimina un doc especifico mediante parametro
+   function deleteDocTask(doc_id) {
+      $.ajax({
+         type: "DELETE",
+         url: "ajax/tareas_docs.php",
+         contentType: "application/json",
+         data: JSON.stringify({
+            doc_id: doc_id
+         }),
+         success: (response) => {
+            console.log(response)
+         },
+         complete: () => {
+            getDocsTask(taskIdInput.val())
+         }
+      })
+   }
+
+   function getDocsTask(tarea_id){
+      taskIdInput.val(tarea_id)
+      html = ""
+      let tableDocsBody = document.getElementById("table_body_docs")
+
+      $.ajax({
+         type: "GET",
+         url: "ajax/tareas_docs.php",
+         data: {
+            tarea_id: tarea_id
+         },
+         success: (response) => {
+            docs = JSON.parse(response)
+            if (docs[0]) {
+               docs.forEach(doc => {
+                  html += `<tr>
+                  <td>${doc.tado_nombre}</td>
+                  <td>
+                     <div class="text-white btn-group btn-group-sm">
+                     <a target='_blank' class="btn btn-info" href="img/tareas_docs/${doc.tado_ref}">
+                     <i class="fa-solid fa-eye"></i>
+                     </a>
+                     <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocTask(${doc.tado_id})'>
+                           <i class="fa-solid fa-trash"></i>
+                           </button>
+                     </div>
+                     </td>
+                     </tr>`
+               })
+
+               tableDocsBody.innerHTML = html
+            } else {
+               tableDocsBody.innerHTML = `<tr col=3 class='text-center'>No hay archivos para esta tarea</tr>`
+            }
+         }
+      })
+   }
 </script>

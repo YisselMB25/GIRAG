@@ -13,5 +13,6 @@ test.html
 .vscode/
 vendor/*
 img/casos_docs/*
+img/tareas_docs/*
 temp
 temp/*
