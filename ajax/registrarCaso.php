@@ -46,7 +46,7 @@ include('seguridad.php');
             $nombre = $docs["full_path"][$key];
             $renombrar = time()."-".$nombre;
 
-            $stmt = "INSERT INTO casos_documentos(cado_ref, caso_id) VALUES('$renombrar', '$last_id')";
+            $stmt = "INSERT INTO casos_documentos(cado_ref, caso_id, cado_nombre) VALUES('$renombrar', '$last_id', '$nombre')";
 
             //Guardamos el documento
             move_uploaded_file($docs["tmp_name"][$key], "img/casos_docs/".$renombrar);

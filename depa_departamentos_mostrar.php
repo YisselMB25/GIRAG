@@ -3,6 +3,7 @@
 <table class=nicetable>
 <tr>
 <td class=tabla_datos_titulo>Departamento</td>
+<td class=tabla_datos_titulo>Correo</td>
 <td class=tabla_datos_titulo_icono>&nbsp;</td>
 <td class=tabla_datos_titulo_icono>&nbsp;</td>
 </tr>
@@ -19,6 +20,7 @@ while ($i<$num)
 ?>
 <tr class='tabla_datos_tr'>
 <td class=tabla_datos><?php echo mysql_result($rs, $i, 'depa_nombre'); ?></td>
+<td class=tabla_datos><?php echo mysql_result($rs, $i, 'depa_correo'); ?></td>
 <td class=tabla_datos_iconos><a href='javascript:editar(<?php echo mysql_result($rs, $i, 'depa_id'); ?>)';><img src='imagenes/modificar.png' border=0></a></td>
 <td class=tabla_datos_iconos><a href='javascript:borrar(<?php echo mysql_result($rs, $i, 'depa_id'); ?>)';><img src='imagenes/trash.png' border=0></a></td>
 </tr>

@@ -166,7 +166,7 @@
 </main>
 
 <script>
-   //Funcion que me agrega una tarea
+   //Funcion que me agrega una tarea---------------------------------------
    function agregarTarea(){
       const formTask = document.getElementById("form_nueva_tarea")
       const modalBackDrop = document.querySelector(".modal-backdrop")
@@ -238,10 +238,9 @@
          complete: () => {
             let btnDlts = document.querySelectorAll(".dlt-btn")
 
-            //Funcion que elimina la tarea por completo------------------------------
+            //Funcion que elimina la tarea por completo----------------------------------
             btnDlts.forEach(btn => {
                btn.addEventListener("click", () => {
-                  taskId.val(btn.dataset.id)
                   $.ajax({
                      type: "DELETE",
                      url: "ajax/tareas.php",
@@ -263,7 +262,7 @@
    }
    obtenerTareas()
 
-   //Funcion que me agrega un documento a la tarea ----------------------------
+   //Funcion que me agrega un documento a la tarea ---------------------------------
    const taskIdInput = $("#tarea_id")
    
    function agregarDoc(){
@@ -285,7 +284,7 @@
       })
    }
 
-   // Funcion que elimina un doc especifico mediante parametro
+   // Funcion que elimina un doc especifico mediante parametro-----------------------------------
    function deleteDocTask(doc_id) {
       $.ajax({
          type: "DELETE",

@@ -67,10 +67,13 @@ $equipos = mysql_query($stmt, $dbh);
       </div>
       <!-- Departamento -->
       <div class="form-group">
-        <label for="frecuencia">Frecuencia</label>
-        <select class="form-control" id="frecuencia" name="frecuencia" disabled>
-          <option selected value="<?php echo $id_depa ?>"><?php echo $depa ?></option>
+        <label for="departamento">Departamento</label>
+        <select class="form-control" id="departamento" disabled>
+          <option value="<?php echo $id_depa ?>"  selected> <?php echo $depa ?></option>
         </select>
+      </div>
+      <div class="form-group">
+        <input type="hidden" class="form-control" name="departamento" value="<?php echo $id_depa ?>">
       </div>
       <!-- Tipo de caso -->
       <div class="form-group">
@@ -190,9 +193,10 @@ $equipos = mysql_query($stmt, $dbh);
       
       $.ajax({
           method: "POST",
-          url: "registrarCaso.php",
+          url: "ajax/registrarCaso.php",
           data: datos,
-          
+          contentType: false,         
+          processData: false,
           beforeSend: () => {
 
           },

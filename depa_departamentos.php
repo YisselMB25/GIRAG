@@ -3,7 +3,8 @@ function crear() {
 $('#result').load('depa_departamentos_crear.php'
 ,
 {
-    'i_depa_nombre':  $('#i_depa_nombre').val()
+    'i_depa_nombre':  $('#i_depa_nombre').val(),
+    'i_depa_correo':  $('#i_depa_correo').val()
     }
     ,
     function(){
@@ -18,7 +19,8 @@ $('#result').load('depa_departamentos_modificar.php?id=' + $('#h2_id').val()
 ,
 {
      'm_depa_id':  $('#m_depa_id').val(),
-     'm_depa_nombre':  $('#m_depa_nombre').val()
+     'm_depa_nombre':  $('#m_depa_nombre').val(),
+     'm_depa_correo':  $('#m_depa_correo').val()
     }
     ,
     function(){
@@ -52,6 +54,7 @@ $.get('depa_departamentos_datos.php?id=' + id, function(data){
      r_array = resp.split('||');
      //alert(r_array[0]);
      $('#m_depa_nombre').val(r_array[1]);
+     $('#m_depa_correo').val(r_array[2]);
      });
 }
 function mostrar() {
@@ -78,6 +81,10 @@ $('#datos_mostrar').load('depa_departamentos_mostrar.php');
 <td><input type='text' id=i_depa_nombre size=40 class='entradas'></td>
 </tr>
 <tr>
+<td class='etiquetas'>Correo:</td>
+<td><input type='text' id=i_depa_correo size=40 class='entradas'></td>
+</tr>
+<tr>
 <td colspan=2><a href='javascript:crear()' class='botones'>Crear</a></td>
 </tr>
 </table>
@@ -91,6 +98,10 @@ $('#datos_mostrar').load('depa_departamentos_mostrar.php');
 <tr>
 <td class='etiquetas'>Departamento:</td>
 <td><input type='text' id=m_depa_nombre size=40 class='entradas'></td>
+</tr>
+<tr>
+<td class='etiquetas'>Correo:</td>
+<td><input type='text' id=m_depa_correo size=40 class='entradas'></td>
 </tr>
 <tr>
 <td colspan=2><a href='javascript:modificar()' class='botones'>Modificar</a></td>
