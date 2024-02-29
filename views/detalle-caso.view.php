@@ -128,6 +128,37 @@
                               <!-- /.modal-dialog -->
                            </div>
                            <!-- /.modal -->
+
+                           <!-- Modal agregar archivos al caso -->
+                           <div class="modal fade" id="modal_caso_docs">
+                              <div class="modal-dialog">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h4 class="modal-title">Agregar archivos</h4>
+                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                       </button>
+                                    </div>
+                                    <div class="modal-body" id="modal-body">
+
+                                       <form id="form_caso_doc" class="my-3" enctype="mul">
+                                          <input type="hidden" id="caso_id" name="caso_id" value="<?php echo $_GET["caso"] ?>">
+                                          <div class="custom-file">
+                                             <input type="file" class="custom-file-input" id="archivos" placeholder="Buscar documentos" name="new_docs[]" multiple>
+                                             <label class="custom-file-label" for="archivos">Agregar archivos</label>
+                                          </div>
+                                       </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                       <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                                       <button type="button" class="btn btn-primary" onclick="casoNewDoc()">Guardar documentos</button>
+                                    </div>
+                                 </div>
+                                 <!-- /.modal-content -->
+                              </div>
+                              <!-- /.modal-dialog -->
+                           </div>
+                           <!-- /.modal -->
                         </span>
                         <hr>
 
@@ -145,14 +176,18 @@
 
                   <h5 class="mt-5 text-muted">Documentos</h5>
                   <ul class="list-unstyled">
-                     <?php while ($fila = mysql_fetch_assoc($casos_documentos)) : ?>
-                        <li>
-                           <a target="_blank" href="img/casos_docs/<?php echo $fila['cado_ref'] ?>" class="btn-link text-secondary"><?php echo $fila['cado_nombre'] ?></a>
-                        </li>
-                     <?php endwhile ?>
+
                   </ul>
+
+                  <table class="table table-sm table-borderless">
+                     <tbody id="case_doc_task">
+
+                     </tbody>
+                  </table>
                   <div class="text-center mt-5 mb-3">
-                     <a href="#" class="btn btn-sm btn-primary">Agregar Archivos</a>
+                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal_caso_docs">
+                        <i class="fa-solid fa-plus"></i> Agregar documento
+                     </button>
                   </div>
                </div>
             </div>
@@ -163,13 +198,21 @@
 
    </section>
    <!-- /.content -->
+
 </main>
 
 <script>
+   function dnoneBackdrop(){
+      let modalBackDrop = document.querySelectorAll(".modal-backdrop")
+
+      modalBackDrop.forEach(e => {
+         e.style.display = "none"
+      })
+   }
+
    //Funcion que me agrega una tarea---------------------------------------
-   function agregarTarea(){
-      const formTask = document.getElementById("form_nueva_tarea")
-      const modalBackDrop = document.querySelector(".modal-backdrop")
+   function agregarTarea() {
+      let formTask = document.getElementById("form_nueva_tarea")
       const taskData = new FormData($("#form_task")[0])
 
       $.ajax({
@@ -181,15 +224,16 @@
          success: data => {
             obtenerTareas()
             formTask.style.display = "none"
-            modalBackDrop.style.display = "none"
+            // modalBackDrop.style.display = "none"
+            dnoneBackdrop()
          }
       })
    }
 
    //Funcion que me trae todas las tareas
-   function obtenerTareas(){
+   function obtenerTareas() {
       const taskSection = document.getElementById("task_section")
-      const caso_id = $("#caso_id").val()
+      let caso_id = $("#caso_id").val()
       let html = ""
 
       $.ajax({
@@ -262,12 +306,99 @@
    }
    obtenerTareas()
 
+   // Funcion para agregar nuevo documento al caso -------------------------------
+   function casoNewDoc() {
+      const modalCasoDocs = document.getElementById("modal_caso_docs")
+      let modalBackDrop = document.querySelectorAll(".modal-backdrop")
+      const casoNewDocForm = $("#form_caso_doc")
+      const datos = new FormData(casoNewDocForm[0])
+
+      $.ajax({
+         type: "POST",
+         url: "ajax/caso.php",
+         contentType: false,
+         processData: false,
+         data: datos,
+         success: (res) => {
+            console.log(res);
+            getDocCaso()
+            modalCasoDocs.style.display = "none"
+            dnoneBackdrop()
+         }
+      })
+   }
+
+   //Funcion que me trae los documentos del caso ----------------------------------
+   function getDocCaso() {
+      let caso_id = $("#caso_id").val()
+      const caseDocSection = $("#case_doc_task")
+      html = ''
+
+      $.ajax({
+         type: "GET",
+         url: "ajax/caso.php",
+         data: {
+            caso_id: caso_id
+         },
+         success: (res) => {
+            datos = JSON.parse(res)
+            if (datos[0]) {
+               datos.forEach(e => {
+                  html += `
+               <tr class="d-flex justify-content-between">
+                  <td>
+                     <a target="_blank" href="img/casos_docs/${e.cado_ref}" class="btn-link text-secondary">${e.cado_nombre}</a>
+                  </td>
+                  <td>
+                  <div class="text-white btn-group btn-group-sm">
+                        <a target='_blank' class="btn btn-info" href="img/casos_docs/${e.cado_ref}"">
+                        <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocCaso(${e.cado_id})'>
+                              <i class="fa-solid fa-trash"></i>
+                              </button>
+                        </div>
+                  </td>
+               </tr>`
+               })
+               caseDocSection.html(html)
+            }else{
+               html += `
+               <tr class="d-flex justify-content-between">
+                  <td>No hay documentos</td>
+               </tr>`
+               caseDocSection.html(html)
+            }
+
+         }
+      })
+   }
+
+   getDocCaso()
+
+   //Funcion que eliminar cada documento del caso ---------------------------------
+   function deleteDocCaso(doc_id) {
+
+      $.ajax({
+         type: "DELETE",
+         url: "ajax/caso.php",
+         contentType: "application/json",
+         data: JSON.stringify({
+            cado_id: doc_id
+         }),
+         success: (e) => {
+            console.log(e);
+            getDocCaso()
+         }
+      })
+   }
+
    //Funcion que me agrega un documento a la tarea ---------------------------------
    const taskIdInput = $("#tarea_id")
-   
-   function agregarDoc(){
-      let formDocTask = $("#form_new_doc")
-      let docData = new FormData(formDocTask[0])
+
+   function agregarDoc() {
+      const formDocTask = $("#form_new_doc")
+      const docData = new FormData(formDocTask[0])
 
       $.ajax({
          type: "POST",
@@ -302,7 +433,7 @@
       })
    }
 
-   function getDocsTask(tarea_id){
+   function getDocsTask(tarea_id) {
       taskIdInput.val(tarea_id)
       html = ""
       let tableDocsBody = document.getElementById("table_body_docs")
@@ -317,7 +448,7 @@
             docs = JSON.parse(response)
             if (docs[0]) {
                docs.forEach(doc => {
-                  html += `<tr>
+                  html += `<tr class="d-flex justify-content-between">
                   <td>${doc.tado_nombre}</td>
                   <td>
                      <div class="text-white btn-group btn-group-sm">
