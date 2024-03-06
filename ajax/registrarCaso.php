@@ -27,7 +27,7 @@ include('../seguridad.php');
       try{
         
         // Query que sube los nombres del archivo y rutina que los sube tambien al server
-        $stmt = "INSERT INTO casos(caso_descripcion, depa_id, cati_id, inso_id, inpr_id, imec_id, impe_id, imma_id, equi_id, caso_fecha, caso_nota) VALUES('$descripcion', '$departamento', '$tipo', '$inc_seg_op', '$inc_procesos', '$imp_eco', '$imp_per', '$imp_med_amb', '$equipos', '$fecha_incidencia', '$nota')";
+        $stmt = "INSERT INTO casos(caso_descripcion, depa_id, cati_id, inso_id, inpr_id, imec_id, impe_id, imma_id, equi_id, caso_fecha, caso_nota, caso_ubicacion) VALUES('$descripcion', '$departamento', '$tipo', '$inc_seg_op', '$inc_procesos', '$imp_eco', '$imp_per', '$imp_med_amb', '$equipos', '$fecha_incidencia', '$nota', '$ubicacion')";
         
         $res = mysql_query($stmt, $dbh);
         if(!$res){
@@ -49,7 +49,7 @@ include('../seguridad.php');
             $stmt = "INSERT INTO casos_documentos(cado_ref, caso_id, cado_nombre) VALUES('$renombrar', '$last_id', '$nombre')";
 
             //Guardamos el documento
-            move_uploaded_file($docs["tmp_name"][$key], "img/casos_docs/".$renombrar);
+            move_uploaded_file($docs["tmp_name"][$key], "../img/casos_docs/".$renombrar);
 
             // Ejecutamos la query de subida a cado
             $res = mysql_query($stmt, $dbh);
@@ -58,7 +58,7 @@ include('../seguridad.php');
               throw new Exception("Error al ejecutar la consulta de subida de archivos: " . $con->error);
             
             }else{
-                echo "Documentos subido exitosamente";
+                // echo "Documentos subido exitosamente";
             }
           }
         }

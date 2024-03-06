@@ -1,7 +1,7 @@
 <?php
 include('conexion.php');
 include('funciones.php');
-include('seguridad.php');
+// include('seguridad.php');
 
 $id_depa = $_GET["depa"];
 
@@ -57,7 +57,8 @@ $equipos = mysql_query($stmt, $dbh);
   </div>
 
   <div class="col-11 col-md-6 container mb-4">
-    <h2>Registrar nuevo caso</h2>
+    <img src="https://giraglogic.girag.aero/img/Girag.png" alt="Girag logo" class="mb-3">
+    <h4>Reporte de incidentes y accidentes (FT-SMS-01)</h4>
     <hr>
     <form id="formulario" enctype="multipart/form-data">
       <!-- Descripcion -->

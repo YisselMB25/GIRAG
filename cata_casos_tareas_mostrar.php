@@ -4,17 +4,25 @@
 
 <div class='table-responsive table-striped table-bordered table-hover table-sm' style='text-align: center; align-items:center'>
 
-<table class=table align-middle>
+<table class="table align-middle">
 
 <thead class='thead-dark'>
 
 <tr>
 
-<th class=tabla_datos_titulo>Departamento</th>
+<th scope='col'>Tarea</th>
 
-<th class=tabla_datos_titulo>Correo</th>
+<th scope='col'>Descrición</th>
 
-<th class=tabla_datos_titulo_icono></th>
+<th scope='col'>Fecha de cierre</th>
+
+<th scope='col'>Estado</th>
+
+<th scope='col'>Departamento asignado </th>
+
+<th scope='col'>Persona asignada</th>
+
+<th scope='col'></th>
 
 </tr>
 
@@ -24,12 +32,15 @@
 
 <?php
 
-$nombre=$_GET['nombre'];
+// $nombre=$_GET['nombre'];
 
 
 
-$qsql ='select * from departamentos';
-
+$qsql ="SELECT cate_id, caso_id, cate_descripcion, cate_fecha_cierre, cate_nombre,
+(SELECT usua_nombre FROM usuarios WHERE usua_id = a.usua_id) usua_asigando, 
+(SELECT depa_nombre FROM departamentos WHERE depa_id = a.depa_id) depa_asignado,
+(SELECT caes_nombre FROM casos_estado WHERE caes_id = a.cate_estado) estado
+FROM casos_tareas a";
 
 
 $rs = mysql_query($qsql);
@@ -46,9 +57,17 @@ while ($i<$num)
 
 <tr class='tabla_datos_tr'>
 
-<td class=tabla_datos><?php echo mysql_result($rs, $i, 'depa_nombre'); ?></td>
+<td class=tabla_datos><?php echo mysql_result($rs, $i, 'cate_nombre'); ?></td>
 
-<td class=tabla_datos><?php echo mysql_result($rs, $i, 'depa_correo'); ?></td>
+<td class=tabla_datos><?php echo mysql_result($rs, $i, 'cate_descripcion'); ?></td>
+
+<td class=tabla_datos><?php echo mysql_result($rs, $i, 'cate_fecha_cierre'); ?></td>
+
+<td class=tabla_datos><?php echo mysql_result($rs, $i, 'estado'); ?></td>
+
+<td class=tabla_datos><?php echo mysql_result($rs, $i, 'depa_asignado'); ?></td>
+
+<td class=tabla_datos><?php echo mysql_result($rs, $i, 'usua_asigando'); ?></td>
 
 
 
@@ -68,16 +87,12 @@ while ($i<$num)
 
                      <a Class='btn' href='javascript:borrar(<?php echo mysql_result($rs, $i, 'caso_id'); ?>)' ;>
 
-                        <svg style = 'width: 22px;' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                        <svg style = 'width: 22px;' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'>
 
                            <path fill = '#ad0000' d='M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z' />
 
                         </svg>
 
-                     </a>
-
-                     <a target="_blank" style="font-size: 22px;" href="pdfqr.php?depa=<?php echo mysql_result($rs, $i, 'depa_id')?>">
-                     <i class="fa-solid fa-print"></i>
                      </a>
 
                   </div></td>

@@ -3,33 +3,24 @@
 $caso_id = $_GET["caso"];
 
 //Pedir toda la info
-$stmt = "SELECT caso_id, caso_descripcion, caso_estado, cati_nombre, inso_nombre, inpr_nombre, imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre,
-
+$stmt = "SELECT caso_id, caso_descripcion, cati_nombre, inso_nombre, inpr_nombre, depa_nombre,
+imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre,
 (SELECT usua_nombre FROM usuarios WHERE  usua_id=usua_id_aprobado) aprobado,
-
-(SELECT usua_nombre FROM usuarios WHERE usua_id=usua_id_asignado) asignado,
-
-(SELECT depa_nombre FROM departamentos WHERE depa_id=depa_id_asignado) depa_asignado
-
+(SELECT usua_nombre FROM usuarios WHERE usua_id=usua_id_asignado) usua_asignado,
+(SELECT depa_nombre FROM departamentos WHERE depa_id=depa_id_asignado) depa_asignado,
+(SELECT caes_nombre FROM casos_estado WHERE caes_id=a.caes_id) caso_estado
 FROM casos a, casos_tipos b, departamentos c, equipos d, impacto_economico e, impacto_medio_ambiente f, impacto_personas g, incidencia_procesos h, incidencia_seg_op i 
-
 WHERE a.cati_id=b.cati_id
-
 AND a.depa_id=c.depa_id 
-
 AND a.equi_id=d.equi_id 
-
 AND a.imec_id=e.imec_id 
-
 AND a.imma_id=f.imma_id 
-
 AND a.impe_id=g.impe_id 
-
 AND a.inpr_id=h.inpr_id
-
 AND a.inso_id=i.inso_id
-
 AND a.caso_id = $caso_id";
+
+
 $caso = mysql_query($stmt, $dbh);
 $caso = mysql_fetch_assoc($caso);
 $caso_id = $caso["caso_id"];

@@ -383,8 +383,8 @@
 
       $.ajax({
          type: "DELETE",
-         url: "ajax/caso.php",
          contentType: "application/json",
+         url: "ajax/caso.php",
          data: JSON.stringify({
             cado_id: doc_id
          }),

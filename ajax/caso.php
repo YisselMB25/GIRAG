@@ -1,4 +1,5 @@
-<?php
+<?php 
+session_start();
 
 include "../conexion.php";
 
@@ -40,6 +41,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
    $stmt = "DELETE FROM casos_documentos WHERE cado_id = $cado_id";
    mysql_query($stmt);
+}elseif($_SERVER["REQUEST_METHOD"] == "PUT"){
+   //Aprobar los casos
+   $_PUT = json_decode(file_get_contents("php://input"), true);
+   // print_r($_SESSION["login_user"]);
+   $caso_id = $_PUT["caso_id"];
+   $user_id = $_SESSION["login_user"];
+
+   $stmt = "UPDATE casos 
+   SET usua_id_aprobado = $user_id 
+   WHERE caso_id = $caso_id";
+   mysql_query($stmt);
+
+   echo "Éxito";
+
 }
 
 
