@@ -1,7 +1,7 @@
 <?php
-include('conexion.php');
-include('funciones.php');
-include('seguridad.php');
+include('../conexion.php');
+include('../funciones.php');
+include('../seguridad.php');
 
 // print_r($_POST);
 
@@ -23,6 +23,7 @@ include('seguridad.php');
 
     //Verficiar si estan llenos los campos
     if(!empty($descripcion) && !empty($departamento) && !empty($tipo) && !empty($ubicacion) && !empty($frecuencia) && !empty($inc_seg_op) && !empty($inc_procesos) && !empty($imp_eco) && !empty($imp_per) && !empty($imp_med_amb) && !empty($equipos) && !empty($fecha_incidencia) && !empty($nota)) { 
+      
       try{
         
         // Query que sube los nombres del archivo y rutina que los sube tambien al server
@@ -31,7 +32,6 @@ include('seguridad.php');
         $res = mysql_query($stmt, $dbh);
         if(!$res){
           throw new Exception("Error al ejecutar la consulta: " . $con->error);
-          
         }else{
           echo "Enviado exitosamente";
         }

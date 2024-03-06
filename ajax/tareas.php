@@ -15,21 +15,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
    if (empty($cate_nombre) or empty($cate_descripcion)) {
       echo $error = "Llenar todos los campos correctamente";
-      if ($usua_id == 0 and $depa_id == 0) {
+      if ($usua_id == 0 && $depa_id == 0) {
          echo $error = "Asignar la tarea a un departamento o usuario";
       }
    }
 
-   // $depa_id = $depa_id > 0 ? $depa_id : NULL;
-   // $usua_id = $usua_id > 0 ? $usua_id : NULL;
+   // $depa_id = $depa_id > 0 ? $depa_id : (NULL);
+   // $usua_id = $usua_id > 0 ? $usua_id : (NULL);
 
    if (empty($error)) {
-      $stmt = "INSERT INTO casos_tareas(cate_nombre, cate_descripcion, cate_estado, caso_id, depa_id, usua_id) VALUES('$cate_nombre', '$cate_descripcion', 1, '$caso_id', '$depa_id', '$usua_id')";
+      $stmt = "INSERT INTO casos_tareas(cate_nombre, cate_descripcion, cate_estado, caso_id, depa_id, usua_id) VALUES('$cate_nombre', '$cate_descripcion', 1, $caso_id, $depa_id, '$usua_id')";
       mysql_query($stmt);
 
       $last_id = mysql_insert_id();
 
       echo "Enviado exitosamente";
+   }else{
+      echo "No se ha enviado";
    }
 
    if (isset($_FILES["archivos"]["name"][0]) and empty($error)) {

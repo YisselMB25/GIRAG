@@ -247,6 +247,8 @@
 
             if (tasks[0]) {
                tasks.forEach(task => {
+                  let asignado = task.usua_nombre ? `Usuario -> ${task.usua_nombre}` : `Departamento -> ${task.depa_nombre}`;
+
                   html += `
                <div class="post">
                   <div class="user-block">
@@ -259,7 +261,7 @@
                            <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
                         </button>
                      </div>
-                     <span class="description">Asignado a: - ${task.usua_nombre}</span>
+                     <span class="description">Asignado a: ${asignado}</span>
                   </div>
                   <p>
                      ${task.cate_descripcion}

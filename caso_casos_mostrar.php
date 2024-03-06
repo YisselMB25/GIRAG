@@ -1,6 +1,6 @@
 <?php include('conexion.php'); ?>
 <div class="table-responsive table-striped table-bordered table-hover table-sm" style="text-align: center; align-items:center">
-   <table class="table">
+   <table class="table align-middle">
       <thead class="thead-dark">
          <tr>
             <th scope="col">Descripción</th>
@@ -15,17 +15,35 @@
             <th scope="col">Equipos</th>
             <th scope="col">Fecha de apertura</th>
             <th scope="col">Aprobado por</th>
-            <th scope="col">Asignado a</th>
+            <th scope="col">Usuario asignado</th>
+            <th scope="col">Departamento asignado</th>
             <th scope="col">&nbsp;</th>
          </tr>
       </thead>
       <tbody>
          <?php
-         // $nombre = $_GET['nombre'];
-         $qsql = "SELECT caso_id, caso_descripcion, caso_abierto_por as  abierto_por, caso_estado, cati_nombre, inso_nombre, inpr_nombre,
+         $depa_id = $_GET['depa_id'];
+         $cati_id = $_GET["cati_id"];
+         $equi_id = $_GET["equi_id"];
+         $usua_id_aprobado = $_GET["usua_id_aprobado"];
+         $usua_id_asignado = $_GET["usua_id_asignado"];
+         $depa_id_asignado = $_GET["depa_id_asignado"];
+
+		   $where='';
+		 
+		   if($depa_id!='') $where .= " AND  a.depa_id IN ($depa_id)";
+         if($cati_id != "") $where .=" AND a.cati_id IN ($cati_id)";
+         if($equi_id != "") $where .= " AND a.equi_id IN ($equi_id)";
+         if($usua_id_aprobado != "") $where .= " AND a.usua_id_aprobado IN ($usua_id_aprobado)";
+         if($usua_id_asignado != "") $where .= " AND a.usua_id_asignado IN ($usua_id_asignado)";
+         if($depa_id_asignado != "") $where .= " AND a.depa_id_asignado IN ($depa_id_asignado)";
+
+         $qsql = "SELECT caso_id, caso_descripcion, cati_nombre, inso_nombre, inpr_nombre, depa_nombre,
 imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre,
 (SELECT usua_nombre FROM usuarios WHERE  usua_id=usua_id_aprobado) aprobado,
-(SELECT usua_nombre FROM usuarios WHERE usua_id=usua_id_asignado) asignado
+(SELECT usua_nombre FROM usuarios WHERE usua_id=usua_id_asignado) usua_asignado,
+(SELECT depa_nombre FROM departamentos WHERE depa_id=depa_id_asignado) depa_asignado,
+(SELECT caes_nombre FROM casos_estado WHERE caes_id=a.caes_id) caso_estado
 FROM casos a, casos_tipos b, departamentos c, equipos d, impacto_economico e, impacto_medio_ambiente f, impacto_personas g, incidencia_procesos h, incidencia_seg_op i 
 WHERE a.cati_id=b.cati_id
 AND a.depa_id=c.depa_id 
@@ -34,19 +52,20 @@ AND a.imec_id=e.imec_id
 AND a.imma_id=f.imma_id 
 AND a.impe_id=g.impe_id 
 AND a.inpr_id=h.inpr_id
-AND a.inso_id=i.inso_id";
+AND a.inso_id=i.inso_id
+$where";
          $rs = mysql_query($qsql);
          $num = mysql_num_rows($rs);
          $i = 0;
          while ($i < $num) {
          ?>
             <tr>
-               <th scope="row">
+               <td>
                   <a href="index.php?p=detalle-caso&caso=<?php echo mysql_result($rs, $i, 'caso_id'); ?>">
                      <?php echo mysql_result($rs, $i, 'caso_descripcion'); ?>
                   </a>
                </th>
-               <td><?php echo mysql_result($rs, $i, 'abierto_por');
+               <td><?php echo mysql_result($rs, $i, 'depa_nombre');
                      ?></td>
                <td><?php echo mysql_result($rs, $i, 'caso_estado'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'cati_nombre'); ?></td>
@@ -58,7 +77,8 @@ AND a.inso_id=i.inso_id";
                <td><?php echo mysql_result($rs, $i, 'equi_nombre'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'caso_fecha'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'aprobado'); ?></td>
-               <td><?php echo mysql_result($rs, $i, 'asignado'); ?></td>
+               <td><?php echo mysql_result($rs, $i, 'usua_asignado'); ?></td>
+               <td><?php echo mysql_result($rs, $i, 'depa_asignado')?></td>
                <td>
                   <div class="btn-group btn-group-sm">
                      <a class="btn" href='javascript:editar(<?php echo mysql_result($rs, $i, 'caso_id'); ?>)' ;>
