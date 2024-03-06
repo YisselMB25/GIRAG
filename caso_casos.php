@@ -36,7 +36,9 @@ $('#result').load('caso_casos_crear.php'
 
     'i_usua_id_aprobado':  $('#i_usua_id_aprobado').val(),
 
-    'i_usua_id_asignado':  $('#i_usua_id_asignado').val()
+    'i_usua_id_asignado':  $('#i_usua_id_asignado').val(),
+
+    'i_depa_id_asignado':  $('#i_depa_id_asignado').val()
 
     }
 
@@ -68,9 +70,9 @@ $('#result').load('caso_casos_modificar.php?id=' + $('#h2_id').val()
 
      'm_caso_descripcion':  $('#m_caso_descripcion').val(),
 
-     'm_usua_id_abierto':  $('#m_usua_id_abierto').val(),
+    //  'm_usua_id_abierto':  $('#m_usua_id_abierto').val(),
 
-     'm_caso_estado':  $('#m_caso_estado').val(),
+    'm_caes_id':  $('#m_caes_id').val(),
 
      'm_depa_id':  $('#m_depa_id').val(),
 
@@ -94,8 +96,9 @@ $('#result').load('caso_casos_modificar.php?id=' + $('#h2_id').val()
 
      'm_usua_id_aprobado':  $('#m_usua_id_aprobado').val(),
 
-     'm_usua_id_asignado':  $('#m_usua_id_asignado').val()
+     'm_usua_id_asignado':  $('#m_usua_id_asignado').val(),
 
+     'm_depa_id_asignado':  $('#m_depa_id_asignado').val(),
     }
 
     ,
@@ -280,7 +283,7 @@ $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878'
 
 <tr>
 
-<?php echo catalogo('usuarios', 'Abierto por', 'usua_nombre', 'i_usua_id_abierto', 'usua_id', 'usua_nombre', '0', '0', '');?>
+<?php //echo catalogo('usuarios', 'Abierto por', 'usua_nombre', 'i_usua_id_abierto', 'usua_id', 'usua_nombre', '0', '0', '');?>
 
 </tr>
 
@@ -295,7 +298,7 @@ $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878'
 
 <tr>
 
-<?php echo catalogo('departamentos', 'Departamento', 'depa_nombre', 'i_depa_id', 'depa_id', 'depa_nombre', '0', '0', '');?>
+<?php echo catalogo('departamentos', 'Abierto por', 'depa_nombre', 'i_depa_id', 'depa_id', 'depa_nombre', '0', '0', '');?>
 
 </tr>
 
@@ -365,7 +368,13 @@ $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878'
 
 <tr>
 
-<?php echo catalogo('usuarios', 'Asignado a', 'usua_nombre', 'i_usua_id_asignado', 'usua_id', 'usua_nombre', '0', '0', '');?>
+<?php echo catalogo('usuarios', 'Usuario asignado', 'usua_nombre', 'i_usua_id_asignado', 'usua_id', 'usua_nombre', '0', '0', '');?>
+
+</tr>
+
+<tr>
+
+<?php echo catalogo('departamentos', 'Departamento asignado', 'depa_nombre', 'i_depa_id_asignado', 'depa_id', 'depa_nombre', '0', '0', '');?>
 
 </tr>
 
@@ -407,9 +416,10 @@ $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878'
 
 <tr>
 
-<td class='etiquetas'>Estado:</td>
+<!-- <td class='etiquetas'>Estado:</td> -->
 
-<td><input type='text' id=m_caso_estado size=40 class='entradas'></td>
+<!-- <td><input type='text' id=m_caso_estado size=40 class='entradas'></td> -->
+<?php echo catalogo('casos_estado', 'Estado', 'caes_nombre', 'm_caes_id', 'caes_id', 'caes_nombre', '0', '0', '');?>
 
 </tr>
 

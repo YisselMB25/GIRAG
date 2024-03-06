@@ -2,8 +2,6 @@
 
 $i_caso_descripcion=$_POST['i_caso_descripcion'];
 
-$i_usua_id_abierto=$_POST['i_usua_id_abierto'];
-
 $i_caes_id=$_POST['i_caes_id'];
 
 $i_depa_id=$_POST['i_depa_id'];
@@ -30,15 +28,13 @@ $i_usua_id_aprobado=$_POST['i_usua_id_aprobado'];
 
 $i_usua_id_asignado=$_POST['i_usua_id_asignado'];
 
+$i_depa_id_asignado = $_POST["i_depa_id_asignado"];
+
 $qsql = "insert into casos 
 
 (
 
 caso_descripcion
-
-, 
-
-usua_id_abierto
 
 , 
 
@@ -92,13 +88,15 @@ usua_id_aprobado
 
 usua_id_asignado
 
+,
+
+depa_id_asignado
+
 ) 
 
 values (
 
 '$i_caso_descripcion', 
-
-'$i_usua_id_abierto', 
 
 '$i_caes_id', 
 
@@ -124,7 +122,10 @@ values (
 
 '$i_usua_id_aprobado', 
 
-'$i_usua_id_asignado')";
+'$i_usua_id_asignado',
+
+'$i_depa_id_asignado'
+)";
 
 mysql_query($qsql);
 
