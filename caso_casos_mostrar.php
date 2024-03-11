@@ -5,8 +5,9 @@
          <tr>
             <th scope="col">ID</th>
             <th scope="col">Descripción</th>
-            <th scope="col">Abierto por</th>
+            <th scope="col">Revisado por</th>
             <th scope="col">Estado</th>
+            <th scope="col">Departamento</th>
             <th scope="col">Tipo</th>
             <th scope="col">Ubicacion</th>
             <th scope="col">Incidencia Seguridad Operacional</th>
@@ -18,33 +19,34 @@
             <th scope="col">Fecha de apertura</th>
             <th scope="col">Aprobado por</th>
             <th scope="col">Usuario asignado</th>
-            <th scope="col">Departamento asignado</th>
             <th scope="col">&nbsp;</th>
          </tr>
       </thead>
       <tbody>
          <?php
-         $depa_id = $_GET['depa_id'];
+         $usua_id_revisado = $_GET['usua_id_revisado'];
          $cati_id = $_GET["cati_id"];
          $equi_id = $_GET["equi_id"];
          $usua_id_aprobado = $_GET["usua_id_aprobado"];
          $usua_id_asignado = $_GET["usua_id_asignado"];
          $depa_id_asignado = $_GET["depa_id_asignado"];
+         $caes_id = $_GET["caes_id"];
 
 		   $where='';
 		 
-		   if($depa_id!='') $where .= " AND  a.depa_id IN ($depa_id)";
+		   if($usua_id_revisado!='') $where .= " AND  a.usua_id_revisado IN ($usua_id_revisado)";
          if($cati_id != "") $where .=" AND a.cati_id IN ($cati_id)";
          if($equi_id != "") $where .= " AND a.equi_id IN ($equi_id)";
          if($usua_id_aprobado != "") $where .= " AND a.usua_id_aprobado IN ($usua_id_aprobado)";
          if($usua_id_asignado != "") $where .= " AND a.usua_id_asignado IN ($usua_id_asignado)";
          if($depa_id_asignado != "") $where .= " AND a.depa_id_asignado IN ($depa_id_asignado)";
+         if($caes_id != "") $where .= " AND a.caes_id IN ($caes_id)";
 
-         $qsql = "SELECT caso_id, caso_descripcion, cati_nombre, inso_nombre, inpr_nombre, depa_nombre, caso_ubicacion,
-imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre,
-(SELECT usua_nombre FROM usuarios WHERE  usua_id=usua_id_aprobado) aprobado,
+         $qsql = "SELECT caso_id, caso_descripcion, cati_nombre, inso_nombre, inpr_nombre, depa_nombre, caso_ubicacion, imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre, usua_id_aprobado, usua_id_revisado, 
+(SELECT usua_nombre FROM usuarios WHERE usua_id = usua_id_revisado) revisado,
+(SELECT usua_nombre FROM usuarios WHERE  usua_id = usua_id_aprobado) aprobado,
 (SELECT usua_nombre FROM usuarios WHERE usua_id=usua_id_asignado) usua_asignado,
-(SELECT depa_nombre FROM departamentos WHERE depa_id=depa_id_asignado) depa_asignado,
+(SELECT depa_nombre FROM departamentos WHERE depa_id=a.depa_id) depa_nombre,
 (SELECT caes_nombre FROM casos_estado WHERE caes_id=a.caes_id) caso_estado
 FROM casos a, casos_tipos b, departamentos c, equipos d, impacto_economico e, impacto_medio_ambiente f, impacto_personas g, incidencia_procesos h, incidencia_seg_op i 
 WHERE a.cati_id=b.cati_id
@@ -67,10 +69,10 @@ $where";
                   <a href="index.php?p=detalle-caso&caso=<?php echo mysql_result($rs, $i, 'caso_id'); ?>">
                      <?php echo mysql_result($rs, $i, 'caso_descripcion'); ?>
                   </a>
-               </th>
-               <td><?php echo mysql_result($rs, $i, 'depa_nombre');
-                     ?></td>
+               </td>
+               <td><?php echo mysql_result($rs, $i, 'revisado');?></td> <!-- Revisado por-->
                <td><?php echo mysql_result($rs, $i, 'caso_estado'); ?></td>
+               <td><?php echo mysql_result($rs, $i, 'depa_nombre'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'cati_nombre'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'caso_ubicacion'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'inso_nombre'); ?></td>
@@ -82,7 +84,6 @@ $where";
                <td><?php echo mysql_result($rs, $i, 'caso_fecha'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'aprobado'); ?></td>
                <td><?php echo mysql_result($rs, $i, 'usua_asignado'); ?></td>
-               <td><?php echo mysql_result($rs, $i, 'depa_asignado')?></td>
                <td>
                   <div class="btn-group btn-group-sm">
                      <a class="btn" href='javascript:editar(<?php echo mysql_result($rs, $i, 'caso_id'); ?>)' ;>
@@ -91,11 +92,11 @@ $where";
                         </svg>
                      </a>
                      <a class="btn" href='javascript:borrar(<?php echo mysql_result($rs, $i, 'caso_id'); ?>)' ;>
-                        <svg style="width: 22px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                        <svg style="width: 22px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                            <path fill="#ad0000" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
                         </svg>
                      </a>
-                     <?php if(mysql_result($rs, $i, 'aprobado') == "N/A"):?>
+                     <?php if(mysql_result($rs, $i, 'usua_id_revisado') == 0):?>
                      <button type="button" class="btn" onclick="aprobarCaso(<?php echo  mysql_result($rs, $i, 'caso_id')?>)"  style="font-size: 22px;" data-casoid=<?php echo mysql_result($rs, $i, 'caso_id')?>>
                         <i class="fa-solid fa-check-to-slot" style="color: #1e7000;"></i>
                      </button>

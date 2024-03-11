@@ -7,7 +7,8 @@
             <a href="index.php?p=caso_casos" class="btn" id="back">
                <i class="fa-solid fa-chevron-left" style="color: #000000;"></i>
             </a>
-            <h1 style="font-weight: 700; font-size: 26px" class="card-title"><?php echo strtoupper($caso["caso_descripcion"]) ?> / <span class="text-primary"><?php echo $caso["caso_fecha"] ?></span></h1>
+            <h2><h4>Programa de Gestión / FT-GAC-04</h4></h2>
+            
          </div>
          <div class="card-body">
             <div class="row">
@@ -25,7 +26,11 @@
                   <div class="row">
                      <div class="col-12">
                         <span class="d-flex justify-content-between">
-                           <h4>Tareas</h4>
+                           <span class="mb-3">
+                              <h6 style="font-size: 19px" class="card-title">Asociado a: Reporte # <?php echo strtoupper($caso["caso_id"]) ?>, <?php echo strtoupper($caso["caso_descripcion"]) ?></h6>
+                              <span class="text-success d-block">Fecha de incidencia-><?php echo $caso["caso_fecha"] ?></span>
+                              <span class="text-primary d-block">Fecha de revisión-><?php echo $caso["caso_fecha_analisis"] ?></span>
+                           </span>
                            <!-- Button trigger modal -->
                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form_nueva_tarea">
                               <i class="fa-solid fa-plus"></i> Nueva tarea
@@ -48,26 +53,26 @@
                                              <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre">
                                           </div>
                                           <div class="form-group">
-                                             <label for="departamentos">Asignar departamento</label>
-                                             <select class="form-control" id="departamentos" name="departamento">
-                                                <option value="0">Seleccionar departamentos</option>
-                                                <?php while ($fila = mysql_fetch_assoc($depas)) : ?>
-                                                   <option value="<?php echo $fila["depa_id"] ?>"><?php echo $fila["depa_nombre"] ?></option>
-                                                <?php endwhile ?>
-                                             </select>
-                                          </div>
-                                          <div class="form-group">
                                              <label for="usuarios">Asignar usuario</label>
                                              <select class="form-control" id="usuarios" name="usuario">
-                                                <option value="0">Seleccionar departamentos</option>
+                                                <option value="0">Seleccionar usuario</option>
                                                 <?php while ($fila = mysql_fetch_assoc($users)) : ?>
                                                    <option value="<?php echo $fila["usua_id"] ?>"><?php echo $fila["usua_nombre"] ?></option>
                                                 <?php endwhile ?>
                                              </select>
                                           </div>
                                           <div class="form-group">
+                                             <label for="fecha_inicio" class="col-form-label">Fecha de inicio</label>
+                                             <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha de inicio">
+                                          </div>
+
+                                          <div class="form-group">
+                                             <label for="fecha_fin" class="col-form-label">Fecha de cierre</label>
+                                             <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" placeholder="Fecha de fin">
+                                          </div>
+                                          <div class="form-group">
                                              <label for="descripcion" class="col-form-label">Descripción</label>
-                                             <textarea class="form-control" id="descripcion" name="descripcion"></textarea>
+                                             <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion de la actividad"></textarea>
                                           </div>
                                           <div class="custom-file">
                                              <input type="file" class="custom-file-input" id="archivos" placeholder="Buscar documentos" name="archivos[]" multiple>
@@ -170,11 +175,11 @@
                   </div>
                </div>
                <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-                  <h3 class="text-primary"><i class="fa-solid fa-circle-info"></i>Descripción</h3>
+                  <h6 class="text-primary">OBJETIVO/META/PROBLEMA/NO CONFORMIDAD</h6>
                   <p class="text-muted"><?php echo $caso["caso_nota"] ?></p>
                   <br>
 
-                  <h5 class="mt-5 text-muted">Documentos</h5>
+                  <h5 class="mt-5 text-muted">Evidencias/Documentos</h5>
                   <ul class="list-unstyled">
 
                   </ul>
@@ -226,6 +231,7 @@
             formTask.style.display = "none"
             // modalBackDrop.style.display = "none"
             dnoneBackdrop()
+            alert(data)
          }
       })
    }
@@ -255,13 +261,16 @@
                      <div class="username d-flex justify-content-between">
                         <div>
                            <span>${task.cate_nombre}</span>
-                           <span class="mx-3 text-warning">Fecha de cierre: ${task.cate_fecha_cierre}</span>
                         </div>
                         <button class='dlt-btn btn' data-id=${task.cate_id}>
                            <i class="fa-solid fa-trash" style="color: #ff0000;"></i>
                         </button>
                      </div>
-                     <span class="description">Asignado a: ${asignado}</span>
+                     <div class="description">
+                        <span class="text-success d-block">Fecha de cierre: ${task.cate_fecha_inicio}</span>
+                        <span class="text-danger d-block">Fecha de cierre: ${task.cate_fecha_cierre}</span>
+                        <span class="d-block">Asignado a: ${asignado}</span>
+                     </div>
                   </div>
                   <p>
                      ${task.cate_descripcion}

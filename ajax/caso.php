@@ -49,11 +49,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    $user_id = $_SESSION["login_user"];
 
    $stmt = "UPDATE casos 
-   SET usua_id_aprobado = $user_id 
+   SET usua_id_revisado = $user_id,
+   caes_id = 3
    WHERE caso_id = $caso_id";
    mysql_query($stmt);
 
-   echo "Éxito";
+   echo "Caso revisado";
 
 }
 

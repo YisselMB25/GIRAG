@@ -76,7 +76,7 @@ while ($i<$num)
 
                      </a>
 
-                     <a target="_blank" style="font-size: 22px;" href="pdfqr.php?depa=<?php echo mysql_result($rs, $i, 'depa_id')?>">
+                     <a target="_blank" style="font-size: 22px;" href="pdfqr.php?depa=<?php echo mysql_result($rs, $i, 'depa_id')?>&tipo=FORM">
                      <i class="fa-solid fa-print"></i>
                      </a>
 

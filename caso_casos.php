@@ -198,22 +198,20 @@
 
   function mostrar() {
 
-    $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878'
-
-      +
-      '&depa_id=' + $('#f_depa_id').val() //Departamento de apertura de caso
-      +
+    $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878'+
+      '&usua_id_revisado=' + $('#f_usua_id_revisado').val() +
       '&cati_id=' + $("#f_cati_id").val() +
       "&equi_id=" + $("#f_equi_id").val() +
       "&usua_id_aprobado=" + $("#f_usua_id_aprobado").val() +
       "&usua_id_asignado=" + $("#f_usua_id_asignado").val() +
-      "&depa_id_asignado=" + $("#f_depa_id_asignado").val()
+      "&depa_id_asignado=" + $("#f_usua_id_revisado").val() +
+      "&caes_id=" + $("#f_caes_id").val()
 
     );
 
   }
 
-  function aprobarCaso(caso_id) {
+  function aprobarCaso(caso_id) { //Cuando ya pasa la revision del caso
 
     $.ajax({
       type: "PUT",
@@ -238,13 +236,17 @@
 
     <div class="d-flex col-10 justify-content-between m-auto flex-wrap">
       <span>
-        <?php echo catalogo('departamentos', 'Abierto por', 'depa_nombre', 'f_depa_id', 'depa_id', 'depa_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
+        <?php echo catalogo('usuarios', 'Revisado por', 'usua_nombre', 'f_usua_id_revisado', 'usua_id', 'usua_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
       </span>
 
 
 
       <span>
         <?php echo catalogo('casos_tipos', 'Tipo', 'cati_nombre', 'f_cati_id', 'cati_id', 'cati_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
+      </span>
+
+      <span>
+        <?php echo catalogo('casos_estado', 'Estado', 'caes_nombre', 'f_caes_id', 'caes_id', 'caes_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
       </span>
 
 

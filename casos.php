@@ -3,12 +3,16 @@ include('conexion.php');
 include('funciones.php');
 // include('seguridad.php');
 
-$id_depa = $_GET["depa"];
+// $id_depa = $_GET["depa"];
 
-$stmt = "SELECT * FROM departamentos WHERE depa_id = $id_depa";
-$depa = mysql_query($stmt, $dbh);
+$stmt = "SELECT * FROM casos_clasificacion";
+$casos_clasificacion = mysql_query($stmt, $dbh);
 
-$depa = mysql_fetch_assoc($depa)["depa_nombre"];
+$stmt = "SELECT * FROM casos_descripciones_tipicas";
+$cadt = mysql_query($stmt, $dbh);
+
+$stmt = "SELECT * FROM departamentos WHERE depa_id != 0 ORDER BY depa_nombre";
+$depas = mysql_query($stmt, $dbh);
 
 $stmt = "SELECT * FROM casos_frecuencia";
 $frecuencia = mysql_query($stmt, $dbh);
@@ -31,7 +35,7 @@ $imp_personas = mysql_query($stmt, $dbh);
 $stmt = "SELECT * FROM impacto_medio_ambiente";
 $imp_ambiente = mysql_query($stmt, $dbh);
 
-$stmt = "SELECT * FROM equipos";
+$stmt = "SELECT * FROM equipos ORDER BY equi_nombre";
 $equipos = mysql_query($stmt, $dbh);
 ?>
 
@@ -56,25 +60,40 @@ $equipos = mysql_query($stmt, $dbh);
 
   </div>
 
-  <div class="col-11 col-md-6 container mb-4">
+  <div class="col-12 col-md-6 container mb-4">
     <img src="https://giraglogic.girag.aero/img/Girag.png" alt="Girag logo" class="mb-3">
     <h4>Reporte de incidentes y accidentes (FT-SMS-01)</h4>
     <hr>
     <form id="formulario" enctype="multipart/form-data">
+      <!-- Abierto por -->
+      <div class="form-group">
+        <label for="abierto_por">Abierto por</label>
+        <input type="text" class="form-control" id="abierto_por" placeholder="Tu nombre...(opcional)" name="abierto_por">
+      </div>
+      <!--Correo -->
+      <div class="form-group">
+        <label for="correo">Correo</label>
+        <input type="email" class="form-control" id="correo" placeholder="Correo...(Opcional)" name="correo">
+      </div>
       <!-- Descripcion -->
       <div class="form-group">
-        <label for="descripcion">Descripcion</label>
-        <input type="text" class="form-control" id="descripcion" placeholder="Descripcion..." name="descripcion">
+
+        <label for="descripcion" class="form-label">Descripcion</label>
+        <input class="form-control" list="descripciones_tipicas" id="descripcion" placeholder="Presiona para buscar o escribir..." name="descripcion">
+        <datalist id="descripciones_tipicas">
+          <?php while ($fila = mysql_fetch_assoc($cadt)) : ?>
+            <option value="<?php echo $fila["cadt_nombre"] ?>">
+            <?php endwhile ?>
       </div>
+      </datalist>
       <!-- Departamento -->
       <div class="form-group">
         <label for="departamento">Departamento</label>
-        <select class="form-control" id="departamento" disabled>
-          <option value="<?php echo $id_depa ?>"  selected> <?php echo $depa ?></option>
+        <select class="form-control" id="departamento" name="departamento">
+          <?php while ($fila = mysql_fetch_assoc($depas)) : ?>
+            <option value="<?php echo $fila["depa_id"] ?>"><?php echo $fila["depa_nombre"] ?></option>
+          <?php endwhile ?>
         </select>
-      </div>
-      <div class="form-group">
-        <input type="hidden" class="form-control" name="departamento" value="<?php echo $id_depa ?>">
       </div>
       <!-- Tipo de caso -->
       <div class="form-group">
@@ -171,10 +190,22 @@ $equipos = mysql_query($stmt, $dbh);
         <label for="nota">Nota</label>
         <textarea class="form-control" id="nota" rows="3" placeholder="Que / Como / Cuando sucedio?" name="nota"></textarea>
       </div>
+      <!-- Seccion de clasificacion -->
+      <label for="nota">Clasificacion del caso</label>
+      <div class="input-group flex-column mb-3">
+        <?php while($fila = mysql_fetch_assoc($casos_clasificacion)):?>
+          <div class="form-check">
+          <input class="form-check-input" type="radio" name="caso_clasificacion" id="<?php echo $fila["cacl_nombre"]?>" value="<?php echo $fila["cacl_id"]?>">
+          <label class="form-check-label" for="<?php echo $fila["cacl_nombre"]?>">
+          <?php echo $fila["cacl_nombre"]?>
+          </label>
+        </div>
+        <?php endwhile?>
+      </div>
       <!-- Archivos -->
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="archivos">Cargar</span>
+          <span class="input-group-text" id="archivos">Subir evidencias</span>
         </div>
         <div class="custom-file">
           <input type="file" class="custom-file-input" id="archivos" aria-describedby="archivos" name="archivos[]" multiple>
@@ -188,23 +219,29 @@ $equipos = mysql_query($stmt, $dbh);
   </div>
 
   <script>
+    const inputs = document.querySelectorAll("input")
+
+    inputs.forEach(inp => {
+      inp.autocomplete = "off"
+    })
+
     registrarCaso = () => {
 
       let datos = new FormData($("#formulario")[0])
-      
-      $.ajax({
-          method: "POST",
-          url: "ajax/registrarCaso.php",
-          data: datos,
-          contentType: false,         
-          processData: false,
-          beforeSend: () => {
 
-          },
-          success: (msg) => {
-            alert(msg)
-          }
-        })
+      $.ajax({
+        method: "POST",
+        url: "ajax/registrarCaso.php",
+        data: datos,
+        contentType: false,
+        processData: false,
+        beforeSend: () => {
+
+        },
+        success: (msg) => {
+          alert(msg)
+        }
+      })
     }
   </script>
 
