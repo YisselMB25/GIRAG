@@ -7,8 +7,12 @@
             <a href="index.php?p=caso_casos" class="btn" id="back">
                <i class="fa-solid fa-chevron-left" style="color: #000000;"></i>
             </a>
-            <h2><h4>Programa de Gestión / FT-GAC-04</h4></h2>
-            
+            <div class="d-flex justify-content-between">
+               <h4>Programa de Gestión / FT-GAC-04</h4>
+               <?php if(empty($caso["caso_fecha_analisis"])):?>
+                  <button class="btn btn-secondary" data-toggle="modal" data-target="#modal-fecha-revision"><i class="fa-solid fa-newspaper"></i> Fecha de Análisis</button>
+               <?php endif?>
+            </div>
          </div>
          <div class="card-body">
             <div class="row">
@@ -29,7 +33,9 @@
                            <span class="mb-3">
                               <h6 style="font-size: 19px" class="card-title">Asociado a: Reporte # <?php echo strtoupper($caso["caso_id"]) ?>, <?php echo strtoupper($caso["caso_descripcion"]) ?></h6>
                               <span class="text-success d-block">Fecha de incidencia-><?php echo $caso["caso_fecha"] ?></span>
-                              <span class="text-primary d-block">Fecha de revisión-><?php echo $caso["caso_fecha_analisis"] ?></span>
+                              <span class="text-primary d-block">Fecha de análisis-> 
+                                 <span id="fecha_revision_span"><?php echo $caso["caso_fecha_analisis"] ?></span>
+                                 </span>   
                            </span>
                            <!-- Button trigger modal -->
                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form_nueva_tarea">
@@ -90,6 +96,36 @@
                               <!-- /.modal-dialog -->
                            </div>
                            <!-- /.modal -->
+
+                           <!-- Modal fecha de revision del programa de gestion-->
+                           <div class="modal fade" id="modal-fecha-revision" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                       <h5 class="modal-title" id="exampleModalLabel">Fecha de análisis del caso</h5>
+                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                       </button>
+                                    </div>
+                                    <div class="modal-body">
+                                       <form id="form-fecha-revision">
+                                          <input type="hidden" name="caso_id" value="<?php echo $_GET["caso"]?>">
+                                          <div class="input-group mb-3">
+                                             <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Fecha</span>
+                                             </div>
+                                             <input type="date" class="form-control" placeholder="Fecha de análisis" aria-label="Fecha de revisión" aria-describedby="basic-addon1" name="fecha_revision" id="fecha-revision">
+                                          </div>
+                                       </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                       <button type="button" class="btn btn-primary" onclick="actualizarFechaAnalisis()">Guardar cambios</button>
+
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
 
                            <!-- Modal detalles de cada tarea como los documentos -->
                            <div class="modal fade" id="modal_detail_task">
@@ -175,7 +211,7 @@
                   </div>
                </div>
                <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
-                  <h6 class="text-primary">OBJETIVO/META/PROBLEMA/NO CONFORMIDAD</h6>
+                  <h6 class="text-danger">OBJETIVO/META/PROBLEMA/NO CONFORMIDAD</h6>
                   <p class="text-muted"><?php echo $caso["caso_nota"] ?></p>
                   <br>
 
@@ -207,12 +243,31 @@
 </main>
 
 <script>
-   function dnoneBackdrop(){
+   function dnoneBackdrop() {
       let modalBackDrop = document.querySelectorAll(".modal-backdrop")
 
       modalBackDrop.forEach(e => {
          e.style.display = "none"
       })
+   }
+
+   // Funcion que actualiza la fecha de revision del caso ------------------------------
+   function actualizarFechaAnalisis(){
+      let datos = new FormData($("#form-fecha-revision")[0])
+
+      $.ajax({
+         method: "POST",
+         url: "ajax/caso.php",
+         processData: false,
+         contentType: false,
+         data: datos,
+         success: res => {
+            let datos = JSON.parse(res)
+            alert(datos.msg) 
+            $("#fecha_revision_span").text(datos.fecha)
+         }
+      })
+
    }
 
    //Funcion que me agrega una tarea---------------------------------------
@@ -275,9 +330,7 @@
                   <p>
                      ${task.cate_descripcion}
                   </p>
-                  <button class='btn' data-toggle="modal" data-target="#modal_detail_task" onclick='getDocsTask(${task.cate_id})'>
-                     <ins>Ver documentos</ins>
-                  </button>
+                  <button class='btn btn-primary' data-toggle="modal" data-target="#modal_detail_task" onclick='getDocsTask(${task.cate_id})'>Evidencias/Documentos</button>
                   
                   </div>
                `
@@ -373,7 +426,7 @@
                </tr>`
                })
                caseDocSection.html(html)
-            }else{
+            } else {
                html += `
                <tr class="d-flex justify-content-between">
                   <td>No hay documentos</td>

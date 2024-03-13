@@ -734,7 +734,7 @@ return $resultado;
 
 
 
-function entrada($tipo, $etiqueta, $id, $tamanio='', $min='', $max='', $onchange='')
+function entrada($tipo, $etiqueta, $id, $tamanio='', $min='', $max='', $onchange='', $div = "")
 
 {
 
@@ -756,11 +756,20 @@ function entrada($tipo, $etiqueta, $id, $tamanio='', $min='', $max='', $onchange
 
 	{
 
-	$resultado ="<td class='etiquetas'>$etiqueta:</td>";
-
-	$resultado .= "<td class='entrada'><input type='text' id='$id' name='$id' style='width:" . $tamanio ."px !important'  autocomplete='off'></td>	";
-
-	$resultado .= "<script>$('#$id').datepicker({ dateFormat: 'yymmdd' });</script>";
+		if($div != "" ){	
+			$resultado = "
+			<div class='form-group' style='width: $tamanio px !important'>
+				<label for='$id'>$etiqueta: </label>
+				<input type='date' class='form-control' id='$id' name='$id' autocomplete='off'>
+		 	</div>";
+			
+		}else{
+		 	$resultado ="<td class='etiquetas'>$etiqueta:</td>";
+			
+			$resultado .= "<td class='entrada'><input type='text' id='$id' name='$id' style='width:" . $tamanio ."px !important'  autocomplete='off'></td>	";
+			
+			$resultado .= "<script>$('#$id').datepicker({ dateFormat: 'yymmdd' });</script>";
+		}
 
 	}
 

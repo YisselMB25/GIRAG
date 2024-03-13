@@ -4,20 +4,48 @@ session_start();
 include "../conexion.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-   
-   foreach($_FILES["new_docs"]["name"] as $key => $value){
-      $nombre = $_FILES["new_docs"]["name"][$key];
-      $ref = time() . "-" . $_FILES["new_docs"]["name"][$key];
-      $caso_id = $_POST['caso_id'];
+
+   if(isset($_POST["fecha_revision"]) and !empty($_POST["fecha_revision"])){
+      // print_r($_POST);
+      // Actualizar fecha de revision
+
+      $caso_id = $_POST["caso_id"];
+      $fecha_analisis = $_POST["fecha_revision"];
+      $stmt = "UPDATE casos 
+      SET caso_fecha_analisis = '$fecha_analisis'
+      WHERE caso_id =  $caso_id";
+
+      $rs = mysql_query($stmt, $dbh);
+      if(!mysql_error()){
+         $msg = "Actualizada correctamente";
+      }else{
+         $msg = "Error";
+      }
       
-      $stmt = "INSERT INTO casos_documentos(cado_nombre, caso_id, cado_ref) VALUES('$nombre', '$caso_id', '$ref')";
-      $res = mysql_query($stmt);
+      $rs = [
+         "fecha" => $fecha_analisis,
+         "msg" => $msg
+      ];
+   
+      echo json_encode($rs);
 
-      move_uploaded_file($_FILES["new_docs"]["tmp_name"][$key], "../img/casos_docs/".$ref);
-
-   }
-   if(!mysql_error()){
-      echo "Subido correctamente";
+   }elseif(!empty($_FILES["new_docs"]["name"]) and isset($_FILES["new_docs"]["name"])){
+      foreach($_FILES["new_docs"]["name"] as $key => $value){
+         $nombre = $_FILES["new_docs"]["name"][$key];
+         $ref = time() . "-" . $_FILES["new_docs"]["name"][$key];
+         $caso_id = $_POST['caso_id'];
+         
+         $stmt = "INSERT INTO casos_documentos(cado_nombre, caso_id, cado_ref) VALUES('$nombre', '$caso_id', '$ref')";
+         $res = mysql_query($stmt);
+         
+         move_uploaded_file($_FILES["new_docs"]["tmp_name"][$key], "../img/casos_docs/".$ref);
+         
+      }
+      if(!mysql_error()){
+         echo "Subido correctamente";
+      }
+   }else{
+      echo "Error";
    }
 }elseif($_SERVER["REQUEST_METHOD"] == "GET"){
    $caso_id = $_GET["caso_id"];

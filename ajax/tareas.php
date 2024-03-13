@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    // $usua_id = $usua_id > 0 ? $usua_id : (NULL);
 
    if (empty($error)) {
-      $stmt = "INSERT INTO casos_tareas(cate_nombre, cate_descripcion, cate_estado, caso_id, usua_id, cate_fecha_inicio, cate_fecha_cierre) VALUES('$cate_nombre', '$cate_descripcion', 1, $caso_id, '$usua_id', '$fecha_inicio', '$fecha_fin')";
+      $stmt = "INSERT INTO casos_tareas(cate_nombre, cate_descripcion, cate_estado, caso_id, usua_id, cate_fecha_inicio, cate_fecha_cierre) VALUES('$cate_nombre', '$cate_descripcion', 3, $caso_id, '$usua_id', '$fecha_inicio', '$fecha_fin')";
       mysql_query($stmt);
 
       $last_id = mysql_insert_id();
