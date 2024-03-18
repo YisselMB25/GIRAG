@@ -29,7 +29,7 @@
          $equi_id = $_GET["equi_id"];
          $usua_id_aprobado = $_GET["usua_id_aprobado"];
          $usua_id_asignado = $_GET["usua_id_asignado"];
-         $depa_id_asignado = $_GET["depa_id_asignado"];
+         $depa_id= $_GET["depa_id"];
          $caes_id = $_GET["caes_id"];
 
 		   $where='';
@@ -39,8 +39,8 @@
          if($equi_id != "") $where .= " AND a.equi_id IN ($equi_id)";
          if($usua_id_aprobado != "") $where .= " AND a.usua_id_aprobado IN ($usua_id_aprobado)";
          if($usua_id_asignado != "") $where .= " AND a.usua_id_asignado IN ($usua_id_asignado)";
-         if($depa_id_asignado != "") $where .= " AND a.depa_id_asignado IN ($depa_id_asignado)";
          if($caes_id != "") $where .= " AND a.caes_id IN ($caes_id)";
+         if($depa_id != "") $where .= " AND a.depa_id IN ($depa_id)";
 
          $qsql = "SELECT caso_id, caso_descripcion, cati_nombre, inso_nombre, inpr_nombre, depa_nombre, caso_ubicacion, imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre, usua_id_aprobado, usua_id_revisado, 
 (SELECT usua_nombre FROM usuarios WHERE usua_id = usua_id_revisado) revisado,
@@ -97,7 +97,10 @@ $where";
                         </svg>
                      </a>
                      <?php if(mysql_result($rs, $i, 'usua_id_revisado') == 0):?>
-                     <button type="button" class="btn" onclick="aprobarCaso(<?php echo  mysql_result($rs, $i, 'caso_id')?>)"  style="font-size: 22px;" data-casoid=<?php echo mysql_result($rs, $i, 'caso_id')?>>
+                     <!-- <button type="button" class="btn" onclick="aprobarCaso(<?php //echo  mysql_result($rs, $i, 'caso_id')?>)"  style="font-size: 22px;" data-casoid=<?php //echo mysql_result($rs, $i, 'caso_id')?>>
+                        <i class="fa-solid fa-check-to-slot" style="color: #1e7000;"></i>
+                     </button> -->
+                     <button type="button" class="btn" style="font-size: 22px;" data-target="#revisado-observaciones" data-toggle="modal" type="button" data-casoid="<?php echo  mysql_result($rs, $i, 'caso_id')?>">
                         <i class="fa-solid fa-check-to-slot" style="color: #1e7000;"></i>
                      </button>
                      <?php endif?>

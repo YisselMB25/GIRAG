@@ -45,7 +45,7 @@ use Mpdf\Tag\Em;
          $fecha_inicio = $_GET["fecha_inicio"];
          $fecha_cierre = $_GET["fecha_cierre"];
 
-         print_r($_GET);
+         // print_r($_GET);
 
          if(!empty($usua_id) or !empty($caes_id) or !empty($fecha_inicio) or !empty($fecha_cierre)){
             $partes = [];
@@ -62,13 +62,14 @@ use Mpdf\Tag\Em;
          // if(!empty($usua_id) and !empty($caes_id)) $where .= " AND ";
          // if(!empty($caes_id)) $where .= " cate_estado IN ($caes_id)"; 
 
-         $qsql = "SELECT cate_id, caso_id, cate_descripcion, cate_fecha_cierre, cate_nombre, cate_fecha_inicio, cate_avance, cate_observaciones,
+         $qsql = "SELECT cate_id, caso_id, cate_descripcion, cate_fecha_cierre, cate_nombre, cate_fecha_inicio, cate_observaciones,
          (SELECT usua_nombre FROM usuarios WHERE usua_id = a.usua_id) usua_asigando,
+         (SELECT catb_avance FROM casos_tareas_bitacora WHERE cate_id = a.cate_id ORDER BY catb_id DESC LIMIT 1) cate_avance,
          (SELECT caes_nombre FROM casos_estado WHERE caes_id = a.cate_estado) estado
          FROM casos_tareas a
          $where";
          
-         echo $qsql;
+         // echo $qsql;
 
          $rs = mysql_query($qsql);
 
@@ -107,7 +108,7 @@ use Mpdf\Tag\Em;
 
                      <!-- <a Class='btn btn-danger' href='javascript:borrar(<?php echo mysql_result($rs, $i, 'cate_id'); ?>)' ;><i class="fa-solid fa-trash"></i></a> -->
 
-                     <button class="btn btn-success btn-finalizar-tarea" data-toggle="modal" data-target="#modal-avance" data-casoId="<?php echo mysql_result($rs, $i, 'cate_id'); ?>" data-avance="<?php echo mysql_result($rs, $i, 'cate_avance'); ?>"><i class="fa-solid fa-clipboard-list"></i></button>
+                     <button class="btn btn-success btn-finalizar-tarea" data-toggle="modal" data-target="#modal-avance" data-cateid="<?php echo mysql_result($rs, $i, 'cate_id'); ?>" data-avance="<?php echo mysql_result($rs, $i, 'cate_avance'); ?>"><i class="fa-solid fa-clipboard-list"></i></button>
 
                   </div>
                </td>

@@ -26,6 +26,14 @@
                            </div>
                         </div>
                      </div>
+                     <div class="col-12 col-sm-4">
+                        <div class="info-box bg-light">
+                           <div class="info-box-content">
+                              <span class="info-box-text text-center text-muted">Revisado por</span>
+                              <span class="info-box-number text-center text-muted mb-0"><?php echo strtoupper($caso["revisado"]) ?></span>
+                           </div>
+                        </div>
+                     </div>
                   </div>
                   <div class="row">
                      <div class="col-12">
@@ -79,6 +87,14 @@
                                           <div class="form-group">
                                              <label for="descripcion" class="col-form-label">Descripción</label>
                                              <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Descripcion de la actividad"></textarea>
+                                          </div>
+                                          <div class="form-group">
+                                             <label for="equipos" class="col-form-label">Recursos</label>
+                                             <textarea class="form-control" id="recursos" name="recursos"></textarea>
+                                          </div>
+                                          <div class="form-group">
+                                             <label for="observaciones" class="col-form-label">Observaciones</label>
+                                             <textarea class="form-control" id="observaciones" name="observaciones"></textarea>
                                           </div>
                                           <div class="custom-file">
                                              <input type="file" class="custom-file-input" id="archivos" placeholder="Buscar documentos" name="archivos[]" multiple>
@@ -215,6 +231,9 @@
                   <p class="text-muted"><?php echo $caso["caso_nota"] ?></p>
                   <br>
 
+                  <h6 class="text-danger">Observaciones del revisado</h6>
+                  <p class="text-muted"><?php echo $caso["caso_observaciones"]?></p>
+
                   <h5 class="mt-5 text-muted">Evidencias/Documentos</h5>
                   <ul class="list-unstyled">
 
@@ -327,8 +346,14 @@
                         <span class="d-block">Asignado a: ${asignado}</span>
                      </div>
                   </div>
-                  <p>
-                     ${task.cate_descripcion}
+                  <p class="mb-1">
+                     <b>Descripcion:</b> ${task.cate_descripcion}
+                  </p>
+                  <p class="mb-1">
+                     <b>Observaciones: </b>${task.cate_observaciones}
+                  </p>
+                  <p class="mb-1">
+                     <b>Recursos</b>: ${task.cate_recursos}
                   </p>
                   <button class='btn btn-primary' data-toggle="modal" data-target="#modal_detail_task" onclick='getDocsTask(${task.cate_id})'>Evidencias/Documentos</button>
                   
@@ -497,6 +522,7 @@
       })
    }
 
+   // Funcion que me trae los documentos de la tarea
    function getDocsTask(tarea_id) {
       taskIdInput.val(tarea_id)
       html = ""
@@ -504,7 +530,7 @@
 
       $.ajax({
          type: "GET",
-         url: "ajax/tareas_docs.php",
+         url: "ajax/tareas-avance.php",
          data: {
             tarea_id: tarea_id
          },

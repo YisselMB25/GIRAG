@@ -1,193 +1,186 @@
 <script>
+   function crear() {
 
-function crear() {
+      $('#result').load('cata_casos_tareas_crear.php'
 
-$('#result').load('cata_casos_tareas_crear.php'
+         ,
 
-,
+         {
 
-{
+            'i_cate_nombre': $('#i_cate_nombre').val(),
 
-    'i_cate_nombre':  $('#i_cate_nombre').val(),
+            'i_cate_descripcion': $('#i_cate_descripcion').val(),
 
-    'i_cate_descripcion':  $('#i_cate_descripcion').val(),
+            'i_cate_fecha_cierre': $('#i_cate_fecha_cierre').val(),
 
-    'i_cate_fecha_cierre':  $('#i_cate_fecha_cierre').val(),
+            'i_cate_estado': $('#i_cate_estado').val(),
 
-    'i_cate_estado':  $('#i_cate_estado').val(),
+            'i_depa_id': $('#i_depa_id').val(),
 
-    'i_depa_id':  $('#i_depa_id').val(),
+            'i_usua_id': $('#i_usua_id').val()
 
-    'i_usua_id':  $('#i_usua_id').val()
+         }
 
-    }
+         ,
 
-    ,
+         function() {
 
-    function(){
+            $('#modal').hide('slow');
 
-        $('#modal').hide('slow');
+            $('#overlay').hide();
 
-        $('#overlay').hide();
+            mostrar();
 
-        mostrar();
+         }
 
-    }
+      );
 
-  );
+   }
 
-}
+   function modificar() {
 
-function modificar() {
+      $('#result').load('cata_casos_tareas_modificar.php?id=' + $('#h2_id').val()
 
-$('#result').load('cata_casos_tareas_modificar.php?id=' + $('#h2_id').val()
+         ,
 
-,
+         {
 
-{
+            'm_cate_id': $('#m_cate_id').val(),
 
-     'm_cate_id':  $('#m_cate_id').val(),
+            'm_cate_nombre': $('#m_cate_nombre').val(),
 
-     'm_cate_nombre':  $('#m_cate_nombre').val(),
+            'm_cate_descripcion': $('#m_cate_descripcion').val(),
 
-     'm_cate_descripcion':  $('#m_cate_descripcion').val(),
+            'm_cate_fecha_cierre': $('#m_cate_fecha_cierre').val(),
 
-     'm_cate_fecha_cierre':  $('#m_cate_fecha_cierre').val(),
+            'm_cate_estado': $('#m_cate_estado').val(),
 
-     'm_cate_estado':  $('#m_cate_estado').val(),
+            'm_depa_id': $('#m_depa_id').val(),
 
-     'm_depa_id':  $('#m_depa_id').val(),
+            'm_usua_id': $('#m_usua_id').val()
 
-     'm_usua_id':  $('#m_usua_id').val()
+         }
 
-    }
+         ,
 
-    ,
+         function() {
 
-    function(){
+            $('#modal2').hide('slow');
 
-       $('#modal2').hide('slow');
+            $('#overlay2').hide();
 
-       $('#overlay2').hide();
+            mostrar();
 
-       mostrar();
+         }
 
-    }
+      );
 
-  );
+   }
 
-}
+   function borrar(id)
 
-function borrar(id)
+   {
 
-{
+      var agree = confirm('¿Está seguro?');
 
-var agree=confirm('¿Está seguro?');
+      if (agree) {
 
-if(agree) {
+         $('#result').load('cata_casos_tareas_borrar.php?id=' + id
 
-   $('#result').load('cata_casos_tareas_borrar.php?id=' + id
+            ,
 
-   ,
+            function()
 
-   function()
+            {
 
-     {
+               mostrar();
 
-     mostrar();
+            }
 
-     }
+         );
 
-  );
+      }
 
- }
+   }
 
-}
+   function editar(id)
 
-function editar(id)
+   {
 
-{
+      $('#modal2').show();
 
-$('#modal2').show();
+      $('#overlay2').show();
 
-$('#overlay2').show();
+      $('#modal2').center();
 
-$('#modal2').center();
+      $('#h2_id').val(id);
 
-$('#h2_id').val(id);
+      $.get('cata_casos_tareas_datos.php?id=' + id, function(data) {
 
-$.get('cata_casos_tareas_datos.php?id=' + id, function(data){
+         var resp = data;
 
-     var resp=data;
+         r_array = resp.split('||');
 
-     r_array = resp.split('||');
+         //alert(r_array[0]);
 
-     //alert(r_array[0]);
+         $('#m_cate_nombre').val(r_array[1]);
 
-     $('#m_cate_nombre').val(r_array[1]);
+         $('#m_cate_descripcion').val(r_array[2]);
 
-     $('#m_cate_descripcion').val(r_array[2]);
+         $('#m_cate_fecha_cierre').val(r_array[3]);
 
-     $('#m_cate_fecha_cierre').val(r_array[3]);
+         $('#m_cate_estado').val(r_array[4]);
 
-     $('#m_cate_estado').val(r_array[4]);
+         $('#m_usua_id').val(r_array[5]);
 
-     $('#m_usua_id').val(r_array[5]);
+      });
 
-     });
+   }
 
-}
+   function mostrar() {
 
-function mostrar() {
-
-$('#datos_mostrar').load('cata_casos_tareas_mostrar.php?'+
-  "usua_id="+$("#f_usua_id").val() +
-  "&caes_id="+$("#f_caes_id").val() +
-  "&fecha_inicio="+$("#f_fecha_inicio").val() +
-  "&fecha_cierre="+$("#f_fecha_cierre").val()
-);
-}
-
-
-
+      $('#datos_mostrar').load('cata_casos_tareas_mostrar.php?' +
+         "usua_id=" + $("#f_usua_id").val() +
+         "&caes_id=" + $("#f_caes_id").val() +
+         "&fecha_inicio=" + $("#f_fecha_inicio").val() +
+         "&fecha_cierre=" + $("#f_fecha_cierre").val()
+      );
+   }
 </script>
 
-<div id='separador'>
+<div id='separador' class="d-flex p-3 rounded-lg shadow-sm mb-3 justify-content-between w-100 align-items-center" style="background-color: #ffff;">
 
-<table width='' class=filtros>
-
-<tr>
-  <td>
-
-    <span>
+   <span>
       <?php echo catalogo('casos_estado', 'Estado', 'caes_nombre', 'f_caes_id', 'caes_id', 'caes_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
-    </span>
+   </span>
 
-    <span>
+   <span>
       <?php echo catalogo('usuarios', 'Usuario asignado', 'usua_nombre', 'f_usua_id', 'usua_id', 'usua_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
-    </span>
+   </span>
 
    </td>
    <span class="d-flex flex-column">
-     <?php echo entrada("fecha", "Fecha de inicio", "f_fecha_inicio"); ?>
+      <?php echo entrada("fecha", "Fecha de inicio", "f_fecha_inicio"); ?>
    </span>
-   
+
+   <span class="d-flex flex-column">
+      <?php echo entrada("fecha", "Fecha de cierre", "f_fecha_cierre"); ?>
+   </span>
+
    <span>
-     <?php echo entrada("fecha", "Fecha de cierre", "f_fecha_cierre"); ?>
+
+      <button class='btn'>
+         <div id='b_mostrar'><a href='javascript:mostrar()' style="font-size: 22px;"><i class="fa-solid fa-eye" style="color: #0049c7;"></i></a></div>
+      </button>
+
+      <!-- <button class="btn"><div id='dmodal' style='text-align:right'><a href='#' style="font-size: 22px;"><i class="fa-solid fa-square-plus" style="color: #39a300;"></i></a></div></button> -->
    </span>
-
-  <td class='tabla_datos'><div id='b_mostrar'><a href='javascript:mostrar()' class=botones>Mostrar</a></div></td>
-  <td><div id='dmodal' style='text-align:right'><a href='#' class=botones>Nuevo</a></div></td>
-
-</tr>
-
-</table>
 
 </div>
 
 <div id='columna6'>
 
-<div id='datos_mostrar'></div>
+   <div id='datos_mostrar'></div>
 
 </div>
 
@@ -195,63 +188,64 @@ $('#datos_mostrar').load('cata_casos_tareas_mostrar.php?'+
 
 <div id='overlay'></div>
 
-<div id='modal'><div id='content'>
+<div id='modal'>
+   <div id='content'>
 
-<table>
+      <table>
 
-<tr>
+         <tr>
 
-<td class='etiquetas'>Tarea:</td>
+            <td class='etiquetas'>Tarea:</td>
 
-<td><input type='text' id=i_cate_nombre size=40 class='entradas'></td>
+            <td><input type='text' id=i_cate_nombre size=40 class='entradas'></td>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<td class='etiquetas'>Descrición:</td>
+            <td class='etiquetas'>Descrición:</td>
 
-<td><input type='text' id=i_cate_descripcion size=40 class='entradas'></td>
+            <td><input type='text' id=i_cate_descripcion size=40 class='entradas'></td>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<td class='etiquetas'>Fecha de cierre:</td>
+            <td class='etiquetas'>Fecha de cierre:</td>
 
-<td><input type='text' id=i_cate_fecha_cierre size=40 class='entradas'></td>
+            <td><input type='text' id=i_cate_fecha_cierre size=40 class='entradas'></td>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<?php echo catalogo('casos_estado', 'Estado', 'caes_nombre', 'i_cate_estado', 'caes_id', 'caes_nombre', '0', '0', '');?>
+            <?php echo catalogo('casos_estado', 'Estado', 'caes_nombre', 'i_cate_estado', 'caes_id', 'caes_nombre', '0', '0', ''); ?>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<?php echo catalogo(' departamentos ', 'Departamento asignado ', ' depa_nombre', 'i_depa_id', ' depa_id ', ' depa_nombre', '0', '0', '');?>
+            <?php echo catalogo(' departamentos ', 'Departamento asignado ', ' depa_nombre', 'i_depa_id', ' depa_id ', ' depa_nombre', '0', '0', ''); ?>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<?php echo catalogo('usuarios', 'Persona asignada', 'usua_nombre', 'i_usua_id', 'usua_id', 'usua_nombre', '0', '0', '');?>
+            <?php echo catalogo('usuarios', 'Persona asignada', 'usua_nombre', 'i_usua_id', 'usua_id', 'usua_nombre', '0', '0', ''); ?>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<td colspan=2><a href='javascript:crear()' class='botones'>Crear</a></td>
+            <td colspan=2><a href='javascript:crear()' class='botones'>Crear</a></td>
 
-</tr>
+         </tr>
 
-</table>
+      </table>
 
-</div>
+   </div>
 
-<a href='#' id='close'>close</a>
+   <a href='#' id='close'>close</a>
 
 </div>
 
@@ -259,57 +253,59 @@ $('#datos_mostrar').load('cata_casos_tareas_mostrar.php?'+
 
 <div id='overlay2'></div>
 
-<div id='modal2'><div id='content2'>
+<div id='modal2'>
+   <div id='content2'>
 
-<input type=hidden id=h2_id><table>
+      <input type=hidden id=h2_id>
+      <table>
 
-<tr>
+         <tr>
 
-<td class='etiquetas'>Tarea:</td>
+            <td class='etiquetas'>Tarea:</td>
 
-<td><input type='text' id=m_cate_nombre size=40 class='entradas'></td>
+            <td><input type='text' id=m_cate_nombre size=40 class='entradas'></td>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<td class='etiquetas'>Descrición:</td>
+            <td class='etiquetas'>Descripción:</td>
 
-<td><input type='text' id=m_cate_descripcion size=40 class='entradas'></td>
+            <td><input type='text' id=m_cate_descripcion size=40 class='entradas'></td>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<td class='etiquetas'>Fecha de cierre:</td>
+            <td class='etiquetas'>Fecha de cierre:</td>
 
-<td><input type='text' id=m_cate_fecha_cierre size=40 class='entradas'></td>
+            <td><input type='text' id=m_cate_fecha_cierre size=40 class='entradas'></td>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<?php echo catalogo('casos_estado', 'Estado', 'caes_nombre', 'm_cate_estado', 'caes_id', 'caes_nombre', '0', '0', '');?>
+            <?php echo catalogo('casos_estado', 'Estado', 'caes_nombre', 'm_cate_estado', 'caes_id', 'caes_nombre', '0', '0', ''); ?>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<?php echo catalogo('usuarios', 'Persona asignada', 'usua_nombre', 'm_usua_id', 'usua_id', 'usua_nombre', '0', '0', '');?>
+            <?php echo catalogo('usuarios', 'Persona asignada', 'usua_nombre', 'm_usua_id', 'usua_id', 'usua_nombre', '0', '0', ''); ?>
 
-</tr>
+         </tr>
 
-<tr>
+         <tr>
 
-<td colspan=2><a href='javascript:modificar()' class='botones'>Modificar</a></td>
+            <td colspan=2><a href='javascript:modificar()' class='botones'>Modificar</a></td>
 
-</tr>
+         </tr>
 
-</table>
+      </table>
 
-</div>
+   </div>
 
-<a href='javascript:void(0);' id='close2'>close</a>
+   <a href='javascript:void(0);' id='close2'>close</a>
 
 </div>
 
@@ -318,7 +314,7 @@ $('#datos_mostrar').load('cata_casos_tareas_mostrar.php?'+
 <div id=result></div>
 
 <div class="modal fade" id="modal-avance" tabindex="-1" aria-labelledby="modal-avance" aria-hidden="true">
-   <div class="modal-dialog">
+   <div class="modal-dialog modal-xl">
       <div class="modal-content">
          <div class="modal-header">
             <h5 class="modal-title" id="modal-avance">Registrar avance</h5>
@@ -326,19 +322,19 @@ $('#datos_mostrar').load('cata_casos_tareas_mostrar.php?'+
                <span aria-hidden="true">&times;</span>
             </button>
          </div>
-         <div class="modal-body">
-            <form>
+         <div class="modal-body container-fluid">
+            <form id="form-nuevo-avance">
                <!-- CasoID -->
-               <input type="hidden" id="caso_id">
+               <input type="hidden" id="cate_id" name="cate_id">
                <!-- Avance -->
                <div class="form-group">
                   <label for="avance-tarea" class="col-form-label">Avance</label>
-                  <input type="number" class="form-control" id="avance-tarea">
+                  <input type="number" class="form-control" id="avance-tarea" name="avance_tarea">
                </div>
                <!-- Observaciones -->
                <div class="form-group">
                   <label for="message-text" class="col-form-label">Observaciones</label>
-                  <textarea class="form-control" id="observaciones"></textarea>
+                  <textarea class="form-control" id="observaciones" name="observaciones"></textarea>
                </div>
                <!-- Documentos de las evidencias -->
                <div class="input-group mb-3">
@@ -346,35 +342,97 @@ $('#datos_mostrar').load('cata_casos_tareas_mostrar.php?'+
                      <span class="input-group-text" id="evidencia">Buscar documento</span>
                   </div>
                   <div class="custom-file">
-                     <input type="file" class="custom-file-input" id="evidencia" aria-describedby="evidencia">
+                     <input type="file" multiple class="custom-file-input" id="evidencia" aria-describedby="evidencia" name="evidencias[]">
                      <label class="custom-file-label" for="evidencia">Evidencias</label>
                   </div>
                </div>
 
             </form>
+            <!-- Seccion de bitacora -->
+            <h5 class="mt-3"><b>Bitácora de la tarea</b></h5>
+            <section class="w-100" id="bitacora-section">
+               
+            </section>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary">Subir avance</button>
+            <button type="button" class="btn btn-primary" onclick="subirEvidencias()">Subir avance</button>
          </div>
       </div>
    </div>
 </div>
 
-
 <script>
-$('#modal-avance').on('show.bs.modal', function (e) {
-  // let inputAvanceTarea = document.querySelector("#avance-tarea")
-  let button = $(e.relatedTarget) // Button that triggered the modal
-  let casoId = button.data("casoid") 
-  let avance = button.data("avance")
-  console.log(casoId, avance);
-  
-  // Extract info from data-* attributes
-  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-  var modal = $(this)
-  modal.find('#avance-tarea').val(avance)
-  modal.find('#caso_id').val(casoId)
-})
+   $('#modal-avance').on('show.bs.modal', function(e) {
+      // let inputAvanceTarea = document.querySelector("#avance-tarea")
+      let button = $(e.relatedTarget) // Button that triggered the modal
+      let cateId = button.data("cateid")
+      let avance = button.data("avance")
+      console.log(cateId, avance);
+
+      let html = ""
+      let html2 = ""
+
+      $.ajax({
+         url: "ajax/tareas-avance.php",
+         method: "GET",
+         data: {
+            tarea_id: cateId
+         },
+         success: res => {
+            let avances = JSON.parse(res)
+            avances.forEach(e => {
+
+               if(e.documentos != null){
+                  html2 = ""
+                  let docus = e.documentos
+                  docus = docus.split(",")
+                  console.log(docus)
+                  docus.forEach(doc => {
+                     html2 += `<p>
+                           <a href="img/tareas_docs/${doc}" target="_blank" class="link-black text-sm"><i class="fas fa-link mr-1"></i>${doc}</a>
+                          </p>`
+                     })
+               }
+               html += `
+               <div class="user-block">
+                        <span class="">
+                          <b class="text-success">Avance representativo: ${e.catb_avance}</b>
+                        </span>
+                        <span class="description">Fecha - ${e.catb_fecha}</span>
+                      </div>
+                      <!-- /.user-block -->
+                      <p>
+                        ${e.catb_descripcion}
+                      </p>
+                      ${html2}
+                    </div><hr>`
+            });
+            $("#bitacora-section").html(html)
+         }
+      })
+
+      // Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      // modal.find("#bitacora-section").html(html)
+      modal.find('#avance-tarea').val(avance)
+      modal.find('#cate_id').val(cateId)
+   })
+
+   function subirEvidencias() {
+      const datos = new FormData($("#form-nuevo-avance")[0])
+
+      $.ajax({
+         url: "ajax/tareas-avance.php",
+         method: "POST",
+         contentType: false,
+         processData: false,
+         data: datos,
+         success: res => {
+            console.log(res);
+         }
+      })
+   }
 </script>

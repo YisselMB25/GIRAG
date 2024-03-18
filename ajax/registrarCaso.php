@@ -7,7 +7,7 @@ print_r($_POST);
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Guardar todas las variables revibidas del POST
-    $nombre_abierto_por = !empty($_POST["nombre"]) ? $_POST["nombre"] : "N/A";
+    $nombre_abierto_por = !empty($_POST["abierto_por"]) ? $_POST["abierto_por"] : "N/A";
     $correo = !empty($_POST["correo"]) ? $_POST["correo"] : "N/A";
     $descripcion = $_POST['descripcion'];
     $departamento = $_POST['departamento'];
@@ -20,17 +20,17 @@ print_r($_POST);
     $imp_per = $_POST['imp_per'];
     $imp_med_amb = $_POST['imp_med_amb'];
     $equipos = $_POST['equipos'];
-    $fecha_incidencia = $_POST['fecha_incidencia'];
+    // $fecha_incidencia = $_POST['fecha_incidencia'];
     $nota = $_POST['nota'];
-    $caso_clasificacion = $_POST["caso_clasificacion"];
+    $cacl_id = $_POST["cacl_id"];
 
     //Verficiar si estan llenos los campos
-    if(!empty($descripcion) && !empty($departamento) && !empty($tipo) && !empty($ubicacion) && !empty($frecuencia) && !empty($inc_seg_op) && !empty($inc_procesos) && !empty($imp_eco) && !empty($imp_per) && !empty($imp_med_amb) && !empty($equipos) && !empty($fecha_incidencia) && !empty($nota) && !empty($ubicacion) && !empty($caso_clasificacion)) { 
+    if(!empty($descripcion) && !empty($departamento) && !empty($tipo) && !empty($ubicacion) && !empty($frecuencia) && !empty($inc_seg_op) && !empty($inc_procesos) && !empty($imp_eco) && !empty($imp_per) && !empty($imp_med_amb) && !empty($equipos) && !empty($nota) && !empty($ubicacion) && !empty($caso_clasificacion)) { 
       
       try{
         
         // Query que sube los nombres del archivo y rutina que los sube tambien al server
-        $stmt = "INSERT INTO casos(caso_descripcion, depa_id, cati_id, inso_id, inpr_id, imec_id, impe_id, imma_id, equi_id, caso_fecha, caso_nota, caso_ubicacion, caso_nombre_abierto_por, caso_correo_abierto_por, cacl_id) VALUES('$descripcion', '$departamento', '$tipo', '$inc_seg_op', '$inc_procesos', '$imp_eco', '$imp_per', '$imp_med_amb', '$equipos', '$fecha_incidencia', '$nota', '$ubicacion', '$nombre_abierto_por', '$correo', '$caso_clasificacion')";
+        $stmt = "INSERT INTO casos(caso_descripcion, depa_id, cati_id, inso_id, inpr_id, imec_id, impe_id, imma_id, equi_id, caso_fecha, caso_nota, caso_ubicacion, caso_nombre_abierto_por, caso_correo_abierto_por, cacl_id) VALUES('$descripcion', '$departamento', '$tipo', '$inc_seg_op', '$inc_procesos', '$imp_eco', '$imp_per', '$imp_med_amb', '$equipos', now(), '$nota', '$ubicacion', '$nombre_abierto_por', '$correo', '$cacl_id')";
         
         $res = mysql_query($stmt, $dbh);
         if(!$res){

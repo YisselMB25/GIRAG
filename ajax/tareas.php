@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $fecha_inicio = $_POST["fecha_inicio"];
    $cate_descripcion = $_POST["descripcion"];
    $caso_id = $_POST["caso_id"];
+   $cate_recursos = $_POST["recursos"];
+   $cate_observaciones = $_POST["observaciones"];
 
    if (empty($cate_nombre) or empty($cate_descripcion) or empty($fecha_inicio) or empty($fecha_fin)) {
       echo $error = "Llenar todos los campos correctamente<br>";
@@ -24,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    // $usua_id = $usua_id > 0 ? $usua_id : (NULL);
 
    if (empty($error)) {
-      $stmt = "INSERT INTO casos_tareas(cate_nombre, cate_descripcion, cate_estado, caso_id, usua_id, cate_fecha_inicio, cate_fecha_cierre) VALUES('$cate_nombre', '$cate_descripcion', 3, $caso_id, '$usua_id', '$fecha_inicio', '$fecha_fin')";
+      $stmt = "INSERT INTO casos_tareas(cate_nombre, cate_descripcion, cate_estado, caso_id, usua_id, cate_fecha_inicio, cate_fecha_cierre, cate_observaciones, cate_recursos) VALUES('$cate_nombre', '$cate_descripcion', 3, $caso_id, '$usua_id', '$fecha_inicio', '$fecha_fin', '$cate_observaciones', '$cate_recursos')";
       mysql_query($stmt);
 
       $last_id = mysql_insert_id();

@@ -3,7 +3,8 @@
 $caso_id = $_GET["caso"];
 
 //Pedir toda la info
-$stmt = "SELECT caso_id, caso_descripcion, cati_nombre, inso_nombre, inpr_nombre, depa_nombre, caso_fecha_analisis, imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre,
+$stmt = "SELECT caso_id, caso_descripcion, cati_nombre, inso_nombre, inpr_nombre, depa_nombre, caso_fecha_analisis, imec_nombre, imma_nombre, equi_nombre, caso_fecha, caso_nota, impe_nombre, caso_observaciones,
+(SELECT usua_nombre FROM usuarios WHERE  usua_id=usua_id_revisado) revisado,
 (SELECT usua_nombre FROM usuarios WHERE  usua_id=usua_id_aprobado) aprobado,
 (SELECT usua_nombre FROM usuarios WHERE usua_id=usua_id_asignado) usua_asignado,
 (SELECT depa_nombre FROM departamentos WHERE depa_id=depa_id_asignado) depa_asignado,

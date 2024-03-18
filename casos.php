@@ -181,10 +181,10 @@ $equipos = mysql_query($stmt, $dbh);
         </select>
       </div>
       <!-- Fecha de incidencia -->
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="fecha_incidencia">Fecha de incidencia</label>
         <input type="date" class="form-control" id="fecha_incidencia" name="fecha_incidencia">
-      </div>
+      </div> -->
       <!-- Nota -->
       <div class="form-group">
         <label for="nota">Nota</label>
@@ -195,7 +195,7 @@ $equipos = mysql_query($stmt, $dbh);
       <div class="input-group flex-column mb-3">
         <?php while($fila = mysql_fetch_assoc($casos_clasificacion)):?>
           <div class="form-check">
-          <input class="form-check-input" type="radio" name="caso_clasificacion" id="<?php echo $fila["cacl_nombre"]?>" value="<?php echo $fila["cacl_id"]?>">
+          <input class="form-check-input" type="radio" name="cacl_id" id="<?php echo $fila["cacl_nombre"]?>" value="<?php echo $fila["cacl_id"]?>">
           <label class="form-check-label" for="<?php echo $fila["cacl_nombre"]?>">
           <?php echo $fila["cacl_nombre"]?>
           </label>

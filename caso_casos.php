@@ -198,27 +198,30 @@
 
   function mostrar() {
 
-    $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878'+
+    $('#datos_mostrar').load('caso_casos_mostrar.php?nochk=6878' +
       '&usua_id_revisado=' + $('#f_usua_id_revisado').val() +
       '&cati_id=' + $("#f_cati_id").val() +
       "&equi_id=" + $("#f_equi_id").val() +
       "&usua_id_aprobado=" + $("#f_usua_id_aprobado").val() +
       "&usua_id_asignado=" + $("#f_usua_id_asignado").val() +
-      "&depa_id_asignado=" + $("#f_usua_id_revisado").val() +
+      "&depa_id=" + $("#f_depa_id").val() +
       "&caes_id=" + $("#f_caes_id").val()
 
     );
 
   }
 
-  function aprobarCaso(caso_id) { //Cuando ya pasa la revision del caso
+  function aprobarCaso() { //Cuando ya pasa la revision del caso
+    const caso_id = $("#caso_id").val()
+    const observaciones = $("#observaciones").val()
 
     $.ajax({
       type: "PUT",
       contentType: "application/json",
       url: "ajax/caso.php",
       data: JSON.stringify({
-        caso_id: caso_id
+        caso_id: caso_id,
+        observaciones: observaciones
       }),
       success: function(res) {
         // console.log("Éxito:", res);
@@ -266,7 +269,7 @@
 
 
       <span>
-        <?php echo catalogo('departamentos', 'Departamento asignado', 'depa_nombre', 'f_depa_id_asignado', 'depa_id', 'depa_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
+        <?php echo catalogo('departamentos', 'Departamento', 'depa_nombre', 'f_depa_id', 'depa_id', 'depa_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
       </span>
     </div>
 
@@ -545,3 +548,43 @@
 
 
 <div id=result></div>
+
+<!-- Modal para aceptar el caso y agregar observaciones-->
+<div class="modal fade" id="revisado-observaciones" tabindex="-1" aria-labelledby="revisado-observaciones" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form-observaciones">
+          <input type="hidden" id="caso_id" name="caso_id">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Observaciones</span>
+            </div>
+            <textarea class="form-control" aria-label="Observaciones" name="observaciones" id="observaciones"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="aprobarCaso()">Aprobar caso</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#revisado-observaciones').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var caso_id = button.data('casoid') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-body #caso_id').val(caso_id)
+})
+
+</script>
