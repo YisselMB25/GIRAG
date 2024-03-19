@@ -387,7 +387,7 @@
                      html2 = ""
                      let docus = e.documentos
                      docus = docus.split(",")
-                     console.log(docus)
+                     // console.log(docus)
                      docus.forEach(doc => {
                         html2 += `<p>
                            <a href="img/tareas_docs/${doc}" target="_blank" class="link-black text-sm"><i class="fas fa-link mr-1"></i>${doc}</a>
@@ -430,7 +430,8 @@
          processData: false,
          data: datos,
          success: res => {
-            // console.log(res);
+            console.log(res);
+            mostrar()
          }
       })
    }

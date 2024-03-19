@@ -2,8 +2,8 @@
 include "../conexion.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-   print_r($_POST);
-   print_r($_FILES);
+   // print_r($_POST);
+   // print_r($_FILES);
 
    $cate_id = $_POST["cate_id"];
    $avance = $_POST["avance_tarea"];
@@ -12,6 +12,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    $stmt = "INSERT INTO casos_tareas_bitacora(cate_id, catb_descripcion, catb_avance, catb_fecha) 
    VALUES('$cate_id', '$observaciones', '$avance', now())";
    mysql_query($stmt);
+
+   if($avance >= 100){
+      $stmt = "UPDATE casos_tareas SET cate_estado = 2 WHERE cate_id = $cate_id";
+      mysql_query($stmt);
+   }
 
    if(!mysql_error()){
       echo "Avance subido" . PHP_EOL;
