@@ -346,17 +346,16 @@
                      <label class="custom-file-label" for="evidencia">Evidencias</label>
                   </div>
                </div>
-
+               <button type="button" class="btn btn-primary" id="btn-subir-avances" onclick="subirEvidencias()">Subir avance</button>
             </form>
             <!-- Seccion de bitacora -->
             <h5 class="mt-3"><b>Bitácora de la tarea</b></h5>
             <section class="w-100" id="bitacora-section">
-               
+
             </section>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="button" class="btn btn-primary" onclick="subirEvidencias()">Subir avance</button>
+            
          </div>
       </div>
    </div>
@@ -365,36 +364,37 @@
 <script>
    $('#modal-avance').on('show.bs.modal', function(e) {
       // let inputAvanceTarea = document.querySelector("#avance-tarea")
+      // console.log(cateId, avance);
       let button = $(e.relatedTarget) // Button that triggered the modal
-      let cateId = button.data("cateid")
       let avance = button.data("avance")
-      console.log(cateId, avance);
+      let cateId = button.data("cateid")
+      
+      function ejecutar(){
+         $("#observaciones").val("")
+         $.ajax({
+            url: "ajax/tareas-avance.php",
+            method: "GET",
+            data: {
+               tarea_id: cateId
+            },
+            success: res => {
+               let avances = JSON.parse(res)
+               let html = ""
+               let html2 = ""
+               avances.forEach(e => {
 
-      let html = ""
-      let html2 = ""
-
-      $.ajax({
-         url: "ajax/tareas-avance.php",
-         method: "GET",
-         data: {
-            tarea_id: cateId
-         },
-         success: res => {
-            let avances = JSON.parse(res)
-            avances.forEach(e => {
-
-               if(e.documentos != null){
-                  html2 = ""
-                  let docus = e.documentos
-                  docus = docus.split(",")
-                  console.log(docus)
-                  docus.forEach(doc => {
-                     html2 += `<p>
+                  if (e.documentos != null) {
+                     html2 = ""
+                     let docus = e.documentos
+                     docus = docus.split(",")
+                     console.log(docus)
+                     docus.forEach(doc => {
+                        html2 += `<p>
                            <a href="img/tareas_docs/${doc}" target="_blank" class="link-black text-sm"><i class="fas fa-link mr-1"></i>${doc}</a>
                           </p>`
                      })
-               }
-               html += `
+                  }
+                  html += `
                <div class="user-block">
                         <span class="">
                           <b class="text-success">Avance representativo: ${e.catb_avance}</b>
@@ -406,19 +406,18 @@
                         ${e.catb_descripcion}
                       </p>
                       ${html2}
-                    </div><hr>`
-            });
-            $("#bitacora-section").html(html)
-         }
-      })
+                      </div><hr>`
+               });
+               $("#bitacora-section").html(html)
+            }
+         })
+      }
+      ejecutar()
 
-      // Extract info from data-* attributes
-      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
       var modal = $(this)
-      // modal.find("#bitacora-section").html(html)
       modal.find('#avance-tarea').val(avance)
       modal.find('#cate_id').val(cateId)
+      document.getElementById("btn-subir-avances").addEventListener("click", ejecutar)
    })
 
    function subirEvidencias() {
@@ -431,7 +430,7 @@
          processData: false,
          data: datos,
          success: res => {
-            console.log(res);
+            // console.log(res);
          }
       })
    }

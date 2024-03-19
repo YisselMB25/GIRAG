@@ -101,14 +101,14 @@ use Mpdf\Tag\Em;
 
                <td>
 
-                  <div Class='btn-group btn-group-sm'>
+                  <div class='btn-group btn-group-sm'>
 
-                     <a Class='btn btn-warning' href='javascript:editar(<?php echo mysql_result($rs, $i, 'cate_id'); ?>)' ;><i class="fa-solid fa-pen-to-square"></i>
+                     <a type="button" data-toggle="tooltip" data-placement="top" title="Modificar" class='btn btn-warning' href='javascript:editar(<?php echo mysql_result($rs, $i, 'cate_id'); ?>)' ;><i class="fa-solid fa-pen-to-square"></i>
                      </a>
 
                      <!-- <a Class='btn btn-danger' href='javascript:borrar(<?php echo mysql_result($rs, $i, 'cate_id'); ?>)' ;><i class="fa-solid fa-trash"></i></a> -->
 
-                     <button class="btn btn-success btn-finalizar-tarea" data-toggle="modal" data-target="#modal-avance" data-cateid="<?php echo mysql_result($rs, $i, 'cate_id'); ?>" data-avance="<?php echo mysql_result($rs, $i, 'cate_avance'); ?>"><i class="fa-solid fa-clipboard-list"></i></button>
+                     <button class="btn btn-success btn-finalizar-tarea" data-toggle="modal" data-target="#modal-avance" data-cateid="<?php echo mysql_result($rs, $i, 'cate_id'); ?>" data-avance="<?php echo mysql_result($rs, $i, 'cate_avance'); ?>"><i type="button" data-toggle="tooltip" data-placement="top" title="Bitácora" class="fa-solid fa-clipboard-list"></i></button>
 
                   </div>
                </td>

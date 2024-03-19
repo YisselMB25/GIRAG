@@ -158,12 +158,10 @@
                                        <table class="table table-sm">
                                           <thead>
                                              <tr>
-                                                <th>Nombre del archivo</th>
-                                                <th></th>
+                                                <th colspan="2">Bitácora de tarea</th>
                                              </tr>
                                           </thead>
                                           <tbody id='table_body_docs'>
-
                                           </tbody>
                                        </table>
 
@@ -526,6 +524,7 @@
    function getDocsTask(tarea_id) {
       taskIdInput.val(tarea_id)
       html = ""
+      let html2 = ""
       let tableDocsBody = document.getElementById("table_body_docs")
 
       $.ajax({
@@ -534,29 +533,37 @@
          data: {
             tarea_id: tarea_id
          },
-         success: (response) => {
-            docs = JSON.parse(response)
-            if (docs[0]) {
-               docs.forEach(doc => {
-                  html += `<tr class="d-flex justify-content-between">
-                  <td>${doc.tado_nombre}</td>
-                  <td>
-                     <div class="text-white btn-group btn-group-sm">
-                     <a target='_blank' class="btn btn-info" href="img/tareas_docs/${doc.tado_ref}">
-                     <i class="fa-solid fa-eye"></i>
-                     </a>
-                     <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocTask(${doc.tado_id})'>
-                           <i class="fa-solid fa-trash"></i>
-                           </button>
-                     </div>
-                     </td>
-                     </tr>`
-               })
+         success: res => {
+            let avances = JSON.parse(res)
+            avances.forEach(e => {
 
-               tableDocsBody.innerHTML = html
-            } else {
-               tableDocsBody.innerHTML = `<tr col=3 class='text-center'>No hay archivos para esta tarea</tr>`
-            }
+               if(e.documentos != null){
+                  html2 = ""
+                  let docus = e.documentos
+                  docus = docus.split(",")
+                  console.log(docus)
+                  docus.forEach(doc => {
+                     html2 += `<p>
+                           <a href="img/tareas_docs/${doc}" target="_blank" class="link-black text-sm"><i class="fas fa-link mr-1"></i>${doc}</a>
+                          </p>`
+                     })
+               }
+               html += `
+               <div class="user-block">
+                        <span class="">
+                          <b class="text-success">Avance representativo: ${e.catb_avance}</b>
+                        </span>
+                        <span class="description">Fecha - ${e.catb_fecha}</span>
+                      </div>
+                      <!-- /.user-block -->
+                      <p>
+                        ${e.catb_descripcion}
+                      </p>
+                      ${html2}
+                    </div><hr>`
+            });
+            // $("#bitacora-section").html(html)
+            $("#table_body_docs").html(html)
          }
       })
    }

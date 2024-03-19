@@ -38,7 +38,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    $stmt = "SELECT catb_descripcion, catb_avance, catb_fecha,
    (SELECT GROUP_CONCAT(ctdb_ref) FROM casos_tareas_bitacora_documentos WHERE catb_id=a.catb_id) documentos
    FROM casos_tareas_bitacora a
-   WHERE cate_id = $tarea_id";
+   WHERE cate_id = $tarea_id
+   ORDER BY catb_id DESC";
 
    $res = mysql_query($stmt);
    while($fila = mysql_fetch_assoc($res)){
