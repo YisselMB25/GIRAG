@@ -1,7 +1,7 @@
 <?php
 include('../conexion.php');
 include('../funciones.php');
-include('../seguridad.php');
+// include('../seguridad.php');
 
 print_r($_POST);
 
@@ -25,7 +25,7 @@ print_r($_POST);
     $cacl_id = $_POST["cacl_id"];
 
     //Verficiar si estan llenos los campos
-    if(!empty($descripcion) && !empty($departamento) && !empty($tipo) && !empty($ubicacion) && !empty($frecuencia) && !empty($inc_seg_op) && !empty($inc_procesos) && !empty($imp_eco) && !empty($imp_per) && !empty($imp_med_amb) && !empty($equipos) && !empty($nota) && !empty($ubicacion) && !empty($caso_clasificacion)) { 
+    if(!empty($descripcion)  && !empty($tipo) && !empty($ubicacion) && !empty($frecuencia) && !empty($inc_seg_op) && !empty($inc_procesos) && !empty($imp_eco) && !empty($imp_per) && !empty($imp_med_amb) && !empty($equipos) && !empty($nota) && !empty($ubicacion) && !empty($cacl_id)) { 
       
       try{
         

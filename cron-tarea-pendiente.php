@@ -5,12 +5,12 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 require "vendor/autoload.php";
 
-// VARIABLES PRINCIPALES
+// VARIABLES PRINCIPALES------------------------------
 $smtp_username = "";
 $smtp_password = "";
 $smtp_host = "smtp.gmail.com";
 
-// Conexion a la base de datos
+// Conexion a la base de datos-----------------------
 $server = "143.198.137.170";
 $usuario = "dunderio_usr_girag";
 $password = "Girag_2024!";
@@ -22,6 +22,8 @@ $con = new mysqli($server, $usuario, $password, $db_nombre);
 if ($con->connect_error) {
    die("Error de conexion: " . $con->connect_error);
 }
+
+// Extraer la plantilla del Gmail
 $sql = "SELECT cont_detalle FROM contratos WHERE cont_nombre = 'task-pending'";
 $res = $con->query($sql);
 $bodyEmail = $res->fetch_all()[0][0];
@@ -39,7 +41,6 @@ $res = $con->query($sql);
 if ($res->num_rows > 0) {
 
    try {
-      //throw $th;
       $mail = new PHPMailer(true);
       // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
       $mail->isSMTP();
