@@ -14,6 +14,8 @@ $m_inso_id=$_POST['m_inso_id'];
 
 $m_inpr_id=$_POST['m_inpr_id'];
 
+$m_ubicacion = $_POST["m_ubicacion"];
+
 $m_imec_id=$_POST['m_imec_id'];
 
 $m_impe_id=$_POST['m_impe_id'];
@@ -45,6 +47,8 @@ cati_id='$m_cati_id',
 inso_id='$m_inso_id', 
 
 inpr_id='$m_inpr_id', 
+
+caso_ubicacion='$m_ubicacion',
 
 imec_id='$m_imec_id', 
 

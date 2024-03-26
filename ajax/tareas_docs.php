@@ -22,18 +22,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    }
 
 }elseif($_SERVER["REQUEST_METHOD"] == "GET"){
-   //Me trae los documentos de una tarea especifica
-   $tarea_id = $_GET["tarea_id"];
-   $response = [];
+   
+      //Me trae los documentos de una tarea especifica
+      $tarea_id = $_GET["tarea_id"];
+      $response = [];
+      
+      $stmt = "SELECT * FROM tareas_documentos WHERE cate_id = $tarea_id";
+      $res = mysql_query($stmt);
+      
+      while ($fila = mysql_fetch_assoc($res)) {
+         array_push($response, $fila);
+      }
+      
+      echo json_encode($response);
 
-   $stmt = "SELECT * FROM tareas_documentos WHERE cate_id = $tarea_id";
-   $res = mysql_query($stmt);
-
-   while ($fila = mysql_fetch_assoc($res)) {
-      array_push($response, $fila);
-   }
-
-   echo json_encode($response);
 
 }elseif($_SERVER["REQUEST_METHOD"] == "DELETE"){
    // Eliminar un documento de tareo especifico

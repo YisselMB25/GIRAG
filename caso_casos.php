@@ -98,6 +98,8 @@
         'm_usua_id_asignado': $('#m_usua_id_asignado').val(),
 
         'm_depa_id_asignado': $('#m_depa_id_asignado').val(),
+
+        "m_ubicacion": $("#m_ubicacion").val(),
       }
 
       ,
@@ -160,6 +162,8 @@
 
       r_array = resp.split('||');
 
+      console.log(r_array);
+
       //alert(r_array[0]);
 
       $('#m_caso_descripcion').val(r_array[1]);
@@ -169,6 +173,8 @@
       $('#m_caso_estado').val(r_array[3]);
 
       $('#m_depa_id').val(r_array[4]);
+
+      $("#m_ubicacion").val(r_array[16])
 
       $('#m_cati_id').val(r_array[5]);
 
@@ -459,6 +465,14 @@
       <tr>
 
         <?php echo catalogo('casos_tipos', 'Tipo', 'cati_nombre', 'm_cati_id', 'cati_id', 'cati_nombre', '0', '0', '500'); ?>
+
+      </tr>
+
+      <tr>
+
+        <td class='etiquetas'>Ubicacion:</td>
+
+        <td><input type='text' id=m_ubicacion size=64 class='entradas'></td>
 
       </tr>
 

@@ -13,8 +13,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    VALUES('$cate_id', '$observaciones', '$avance', now())";
    mysql_query($stmt);
 
+   // Modificar el esetado segun el avance de la tarea y si no se acepta el resultado
    if($avance >= 100){
       $stmt = "UPDATE casos_tareas SET cate_estado = 2 WHERE cate_id = $cate_id";
+      mysql_query($stmt);
+   }else{
+      $stmt = "UPDATE casos_tareas SET cate_estado = 3 WHERE cate_id = $cate_id";
       mysql_query($stmt);
    }
 

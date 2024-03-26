@@ -7,11 +7,14 @@
             <a href="index.php?p=caso_casos" class="btn" id="back">
                <i class="fa-solid fa-chevron-left" style="color: #000000;"></i>
             </a>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column col-4">
                <h4>Programa de Gestión / FT-GAC-04</h4>
-               <?php if(empty($caso["caso_fecha_analisis"])):?>
-                  <button class="btn btn-secondary" data-toggle="modal" data-target="#modal-fecha-revision"><i class="fa-solid fa-newspaper"></i> Fecha de Análisis</button>
-               <?php endif?>
+               <?php if (empty($caso["caso_fecha_analisis"])) : ?>
+                  <button class="btn btn-secondary mb-3" data-toggle="modal" data-target="#modal-fecha-revision"><i class="fa-solid fa-newspaper"></i> Fecha de Análisis</button>
+               <?php else:?>
+                  <a class="btn btn-warning mb-3" href="programa-gestion-pdf.php?caso=<?php echo $_GET["caso"]?>" target="_blank"><i class="fa-solid fa-file-pdf" ></i> Programa de gestión</a>
+               <?php endif ?>
+               <a class="btn btn-primary text-white mb-3" href="reporte-incidente-pdf.php?caso=<?php echo $_GET["caso"]?>" target="_blank"><i class="fa-solid fa-file-pdf"></i> Reporte de incidente</a>
             </div>
          </div>
          <div class="card-body">
@@ -41,9 +44,9 @@
                            <span class="mb-3">
                               <h6 style="font-size: 19px" class="card-title">Asociado a: Reporte # <?php echo strtoupper($caso["caso_id"]) ?>, <?php echo strtoupper($caso["caso_descripcion"]) ?></h6>
                               <span class="text-success d-block">Fecha de incidencia-><?php echo $caso["caso_fecha"] ?></span>
-                              <span class="text-primary d-block">Fecha de análisis-> 
+                              <span class="text-primary d-block">Fecha de análisis->
                                  <span id="fecha_revision_span"><?php echo $caso["caso_fecha_analisis"] ?></span>
-                                 </span>   
+                              </span>
                            </span>
                            <!-- Button trigger modal -->
                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#form_nueva_tarea">
@@ -125,7 +128,7 @@
                                     </div>
                                     <div class="modal-body">
                                        <form id="form-fecha-revision">
-                                          <input type="hidden" name="caso_id" value="<?php echo $_GET["caso"]?>">
+                                          <input type="hidden" name="caso_id" value="<?php echo $_GET["caso"] ?>">
                                           <div class="input-group mb-3">
                                              <div class="input-group-prepend">
                                                 <span class="input-group-text" id="basic-addon1">Fecha</span>
@@ -162,6 +165,17 @@
                                              </tr>
                                           </thead>
                                           <tbody id='table_body_docs'>
+                                          </tbody>
+                                       </table>
+
+                                       <table class="table table-sm">
+                                          <thead>
+                                             <tr>
+                                                <th scope="col">Documento</th>
+                                                <th scope="col">Acciones</th>
+                                             </tr>
+                                          </thead>
+                                          <tbody id='table_body_task_docs'>
                                           </tbody>
                                        </table>
 
@@ -224,13 +238,14 @@
                      </div>
                   </div>
                </div>
-               <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2">
+               <div class="col-12 col-md-12 col-lg-4 order-1 order-md-2 mt-4">
+                  <hr class="d-block d-md-none">
                   <h6 class="text-danger">OBJETIVO/META/PROBLEMA/NO CONFORMIDAD</h6>
                   <p class="text-muted"><?php echo $caso["caso_nota"] ?></p>
                   <br>
 
                   <h6 class="text-danger">Observaciones del revisado</h6>
-                  <p class="text-muted"><?php echo $caso["caso_observaciones"]?></p>
+                  <p class="text-muted"><?php echo $caso["caso_observaciones"] ?></p>
 
                   <h5 class="mt-5 text-muted">Evidencias/Documentos</h5>
                   <ul class="list-unstyled">
@@ -269,7 +284,7 @@
    }
 
    // Funcion que actualiza la fecha de revision del caso ------------------------------
-   function actualizarFechaAnalisis(){
+   function actualizarFechaAnalisis() {
       let datos = new FormData($("#form-fecha-revision")[0])
 
       $.ajax({
@@ -280,7 +295,7 @@
          data: datos,
          success: res => {
             let datos = JSON.parse(res)
-            alert(datos.msg) 
+            alert(datos.msg)
             $("#fecha_revision_span").text(datos.fecha)
          }
       })
@@ -353,7 +368,7 @@
                   <p class="mb-1">
                      <b>Recursos</b>: ${task.cate_recursos}
                   </p>
-                  <button class='btn btn-primary' data-toggle="modal" data-target="#modal_detail_task" onclick='getDocsTask(${task.cate_id})'>Evidencias/Documentos</button>
+                  <button class='btn btn-primary' data-toggle="modal" data-target="#modal_detail_task" onclick="ejecutarOpenTaskDetails(${task.cate_id})">Evidencias/Documentos</button>
                   
                   </div>
                `
@@ -393,6 +408,11 @@
    }
    obtenerTareas()
 
+   function ejecutarOpenTaskDetails(id){
+      getDocTaskGenerals(id)
+      getDocsTask(id)
+   }
+
    // Funcion para agregar nuevo documento al caso -------------------------------
    function casoNewDoc() {
       const modalCasoDocs = document.getElementById("modal_caso_docs")
@@ -421,6 +441,7 @@
       const caseDocSection = $("#case_doc_task")
       html = ''
 
+
       $.ajax({
          type: "GET",
          url: "ajax/caso.php",
@@ -441,7 +462,7 @@
                         <a target='_blank' class="btn btn-info" href="img/casos_docs/${e.cado_ref}"">
                         <i class="fa-solid fa-eye"></i>
                         </a>
-                        <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocCaso(${e.cado_id})'>
+                        <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocTask(${e.cado_id})'>
                               <i class="fa-solid fa-trash"></i>
                               </button>
                         </div>
@@ -520,6 +541,38 @@
       })
    }
 
+   // Funcion que trae los documentos generales de la tarea
+   function getDocTaskGenerals(doc_id) {
+      let html2 = ""
+      
+      $.get("ajax/tareas_docs.php", 
+      {tarea_id: doc_id},
+      function(data) {
+         let datos = JSON.parse(data);
+
+         datos.forEach(e => {
+            html2 += `<tr>
+                  <td>
+                     <a target="_blank" href="img/casos_docs/${e.tado_ref}" class="btn-link text-secondary">${e.tado_nombre}</a>
+                  </td>
+                  <td>
+                  <div class="text-white btn-group btn-group-sm">
+                        <a target='_blank' class="btn btn-info" href="img/casos_docs/${e.tado_ref}"">
+                        <i class="fa-solid fa-eye"></i>
+                        </a>
+                        <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocTask(${e.tado_id})'>
+                              <i class="fa-solid fa-trash"></i>
+                              </button>
+                        </div>
+                  </td>
+               </tr>`
+         })
+
+         $("#table_body_task_docs").html(html2); 
+         getDocTaskGenerals(taskIdInput.val())
+      })
+   }
+
    // Funcion que me trae los documentos de la tarea
    function getDocsTask(tarea_id) {
       taskIdInput.val(tarea_id)
@@ -537,7 +590,7 @@
             let avances = JSON.parse(res)
             avances.forEach(e => {
 
-               if(e.documentos != null){
+               if (e.documentos != null) {
                   html2 = ""
                   let docus = e.documentos
                   docus = docus.split(",")
@@ -546,7 +599,7 @@
                      html2 += `<p>
                            <a href="img/tareas_docs/${doc}" target="_blank" class="link-black text-sm"><i class="fas fa-link mr-1"></i>${doc}</a>
                           </p>`
-                     })
+                  })
                }
                html += `
                <div class="user-block">

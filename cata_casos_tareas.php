@@ -371,7 +371,18 @@
       
       function ejecutar(){
          $("#observaciones").val("")
-         $.ajax({
+         buscarBitacora(cateId)
+      }
+      ejecutar()
+
+      var modal = $(this)
+      modal.find('#avance-tarea').val(avance)
+      modal.find('#cate_id').val(cateId)
+      document.getElementById("btn-subir-avances").addEventListener("click", ejecutar())
+   })
+
+   function buscarBitacora(cateId){
+      $.ajax({
             url: "ajax/tareas-avance.php",
             method: "GET",
             data: {
@@ -411,14 +422,7 @@
                $("#bitacora-section").html(html)
             }
          })
-      }
-      ejecutar()
-
-      var modal = $(this)
-      modal.find('#avance-tarea').val(avance)
-      modal.find('#cate_id').val(cateId)
-      document.getElementById("btn-subir-avances").addEventListener("click", ejecutar)
-   })
+   }
 
    function subirEvidencias() {
       const datos = new FormData($("#form-nuevo-avance")[0])
@@ -432,6 +436,7 @@
          success: res => {
             console.log(res);
             mostrar()
+            buscarBitacora($('#cate_id').val())
          }
       })
    }
