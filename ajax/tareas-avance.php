@@ -2,8 +2,8 @@
 include "../conexion.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-   // print_r($_POST);
-   // print_r($_FILES);
+   print_r($_POST);
+   print_r($_FILES);
 
    $cate_id = $_POST["cate_id"];
    $avance = $_POST["avance_tarea"];
@@ -12,6 +12,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    $stmt = "INSERT INTO casos_tareas_bitacora(cate_id, catb_descripcion, catb_avance, catb_fecha) 
    VALUES('$cate_id', '$observaciones', '$avance', now())";
    mysql_query($stmt);
+   $last_insert_id = mysql_insert_id();
 
    // Modificar el esetado segun el avance de la tarea y si no se acepta el resultado
    if($avance >= 100){
@@ -24,7 +25,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
    if(!mysql_error()){
       echo "Avance subido" . PHP_EOL;
-      $last_insert_id = mysql_insert_id();
       
       if(!empty($_FILES["evidencias"]["name"][0])){
          

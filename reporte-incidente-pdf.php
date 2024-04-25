@@ -8,9 +8,11 @@ $mpdf = new \Mpdf\Mpdf(['tempDir' => __DIR__ . "/temp"]);
 $caso_id = $_GET["caso"];
 
 $stmt = "SELECT cont_detalle FROM contratos WHERE cont_nombre = 'REPORTE-INCIDENTES'";
-$res = mysql_query($stmt);
+$plantilla = mysql_fetch_assoc(mysql_query($stmt))["cont_detalle"];
 
-$plantilla = mysql_fetch_assoc($res)["cont_detalle"];
+// print_r(mysql_fetch_assoc($res));
+
+// $plantilla = mysql_fetch_assoc($res)["cont_detalle"];
 
 // print_r($plantilla);
 
@@ -34,7 +36,7 @@ $plantilla = str_replace("[TIPO_REPORTE]", $caso_detalles["tipo_reporte"], $plan
 $plantilla = str_replace("[REPORTE_CLASIFICACION]", $caso_detalles["reporte_asociado"], $plantilla);
 $plantilla = str_replace("[TITULO_EVENTO]", $caso_detalles["caso_descripcion"], $plantilla);
 $plantilla = str_replace("[PERSONAS_LESIONADAS]", $caso_detalles["lesionados"], $plantilla);
-$plantilla = str_replace("[DESCRIPCION_EVENTO]", $caso_detalles["caso_descripcion"], $plantilla);
+$plantilla = str_replace("[DESCRIPCION_EVENTO]", $caso_detalles["caso_nota"], $plantilla);
 
 // print_r($plantilla);
 

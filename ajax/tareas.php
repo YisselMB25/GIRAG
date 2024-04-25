@@ -11,14 +11,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $fecha_fin = $_POST["fecha_fin"];
    $fecha_inicio = $_POST["fecha_inicio"];
    $cate_descripcion = $_POST["descripcion"];
-   $caso_id = $_POST["caso_id"];
+   $caso_id = $_POST["caso_id"]; //Registrar tarea a este caso
    $cate_recursos = $_POST["recursos"];
    $cate_observaciones = $_POST["observaciones"];
 
    if (empty($cate_nombre) or empty($cate_descripcion) or empty($fecha_inicio) or empty($fecha_fin)) {
-      echo $error = "Llenar todos los campos correctamente<br>";
+      echo $error = "Llenar todos los campos correctamente";
       if ($usua_id == 0) {
-         echo $error = "Asignar la tarea a un departamento o usuario<br>";
+         echo $error = "Asignar la tarea a un departamento o usuario";
       }
    }
 
@@ -31,9 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       $last_id = mysql_insert_id();
 
-      echo "Enviado exitosamente<br>";
+      $stmt = "INSERT INTO casos_tareas_bitacora(cate_id, catb_descripcion, catb_avance, catb_fecha) VALUES($last_id, 'Apertura de tareas', '0', now())";
+      mysql_query($stmt);
+      echo json_encode(["success" => "Tarea registrada"]);
    }else{
-      echo "No se ha enviado<br>";
+      http_response_code(400);
+      echo json_encode(["error" => "Ha ocurrido un error"]);
    }
 
    if (!empty($_FILES["archivos"]["name"][0]) and empty($error)) {
@@ -56,7 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    $stmt = "SELECT ct.*, 
    (SELECT usua_nombre FROM usuarios WHERE usua_id = ct.usua_id) as usua_nombre, 
    (SELECT depa_nombre FROM departamentos WHERE depa_id = ct.depa_id) as depa_nombre,
-   (SELECT caes_nombre FROM casos_estado WHERE caes_id = cate_estado ) as tarea_estado
+   (SELECT caes_nombre FROM casos_estado WHERE caes_id = cate_estado ) as tarea_estado,
+   (SELECT catb_avance FROM casos_tareas_bitacora WHERE cate_id = ct.cate_id ORDER BY catb_id DESC LIMIT 1) as ultimo_avance
    FROM casos_tareas ct
    WHERE ct.caso_id = '$caso_id' 
    ORDER BY ct.cate_id DESC";

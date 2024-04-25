@@ -8,7 +8,7 @@ $imagen_usuario = obtener_valor("select usua_imagen from usuarios where usua_id=
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
-	<a href="index.php" class="brand-link">
+	<a href="index.php?p=home" class="brand-link">
 
 	  <img src="https://giraglogic.girag.aero/img/Girag.png" alt="Logo" class="brand-image img-circle elevation-3"
 

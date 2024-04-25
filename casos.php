@@ -26,8 +26,8 @@ $inc_seg_op = mysql_query($stmt, $dbh);
 $stmt = "SELECT* FROM incidencia_procesos";
 $inc_procesos = mysql_query($stmt, $dbh);
 
-$stmt = "SELECT * FROM impacto_economico";
-$imp_economico = mysql_query($stmt, $dbh);
+$stmt = "SELECT * FROM impacto_Económico";
+$imp_Económico = mysql_query($stmt, $dbh);
 
 $stmt = "SELECT * FROM impacto_personas";
 $imp_personas = mysql_query($stmt, $dbh);
@@ -35,8 +35,12 @@ $imp_personas = mysql_query($stmt, $dbh);
 $stmt = "SELECT * FROM impacto_medio_ambiente";
 $imp_ambiente = mysql_query($stmt, $dbh);
 
-$stmt = "SELECT * FROM equipos ORDER BY equi_nombre";
+$stmt = "SELECT * FROM equipos WHERE equi_id != 0 ORDER BY equi_nombre";
 $equipos = mysql_query($stmt, $dbh);
+
+$stmt = "SELECT * FROM cargos_usuarios";
+$cargos = mysql_query($stmt);
+
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +65,7 @@ $equipos = mysql_query($stmt, $dbh);
   </div>
 
   <div class="col-12 col-md-6 container mb-4">
-    <img src="https://giraglogic.girag.aero/img/Girag.png" alt="Girag logo" class="mb-3">
+    <img src="https://giraglogic.girag.aero/img/Girag.png" alt="Girag logo" class="mb-3" width="200px">
     <h4>Reporte de incidentes y accidentes (FT-SMS-01)</h4>
     <hr>
     <form id="formulario" enctype="multipart/form-data">
@@ -78,7 +82,7 @@ $equipos = mysql_query($stmt, $dbh);
       <!-- Descripcion -->
       <div class="form-group">
 
-        <label for="descripcion" class="form-label">Descripcion</label>
+        <label for="descripcion" class="form-label">Descripción</label>
         <input class="form-control" list="descripciones_tipicas" id="descripcion" placeholder="Presiona para buscar o escribir..." name="descripcion">
         <datalist id="descripciones_tipicas">
           <?php while ($fila = mysql_fetch_assoc($cadt)) : ?>
@@ -90,8 +94,21 @@ $equipos = mysql_query($stmt, $dbh);
       <div class="form-group">
         <label for="departamento">Departamento</label>
         <select class="form-control" id="departamento" name="departamento">
+          <option selected>Escoger Departamento</option>
+
           <?php while ($fila = mysql_fetch_assoc($depas)) : ?>
             <option value="<?php echo $fila["depa_id"] ?>"><?php echo $fila["depa_nombre"] ?></option>
+          <?php endwhile ?>
+        </select>
+      </div>
+      <!-- Cargo del usuarios -->
+      <div class="form-group">
+        <label for="departamento">Cargo de quien reporta</label>
+        <select class="form-control" id="caus_id" name="caus_id">
+          <option selected>Escoger el cargo que ocupas</option>
+
+          <?php while ($fila = mysql_fetch_assoc($cargos)) : ?>
+            <option value="<?php echo $fila["caus_id"] ?>"><?php echo $fila["caus_nombre"] ?></option>
           <?php endwhile ?>
         </select>
       </div>
@@ -99,7 +116,7 @@ $equipos = mysql_query($stmt, $dbh);
       <div class="form-group">
         <label for="tipo">Tipo de caso</label>
         <select class="form-control" id="tipo" name="tipo">
-          <option selected>Escoger tipo</option>
+          <option selected disabled>Escoger tipo</option>
           <?php while ($fila = mysql_fetch_assoc($tipos)) : ?>
             <option value="<?php echo $fila["cati_id"] ?>"><?php echo $fila["cati_nombre"] ?></option>
           <?php endwhile ?>
@@ -107,84 +124,111 @@ $equipos = mysql_query($stmt, $dbh);
       </div>
       <!-- Ubicacion -->
       <div class="form-group">
-        <label for="ubicacion">Ubicacion</label>
+        <label for="ubicacion">Ubicación</label>
         <input type="text" class="form-control" id="ubicacion" placeholder="Ubicacion donde sucedio?..." name="ubicacion">
-      </div>
-      <!-- Frecuencia -->
-      <div class="form-group">
-        <label for="frecuencia">Frecuencia</label>
-        <select class="form-control" id="frecuencia" name="frecuencia">
-          <option selected>Escoger frecuencia</option>
-          <?php while ($fila = mysql_fetch_assoc($frecuencia)) : ?>
-            <option value="<?php echo $fila["cafr_id"] ?>"><?php echo $fila["cafr_nombre"] ?></option>
-          <?php endwhile ?>
-        </select>
-      </div>
-      <!-- Seguridad operacional -->
-      <div class="form-group">
-        <label for="seg_op">Incidencia en la Seguridad Operacional</label>
-        <select class="form-control" id="seg_op" name="seg_op">
-          <option selected>Escoger Incidencia en la Seguridad Operacional</option>
-          <?php while ($fila = mysql_fetch_assoc($inc_seg_op)) : ?>
-            <option value="<?php echo $fila["inso_id"] ?>"><?php echo $fila["inso_nombre"] ?></option>
-          <?php endwhile ?>
-        </select>
-      </div>
-      <!-- Inicidencia de procesos -->
-      <div class="form-group">
-        <label for="procesos">Incidencia en los procesos</label>
-        <select class="form-control" id="procesos" name="procesos">
-          <option selected>Escoger Incidencia de procesos</option>
-          <?php while ($fila = mysql_fetch_assoc($inc_procesos)) : ?>
-            <option value="<?php echo $fila["inpr_id"] ?>"><?php echo $fila["inpr_nombre"] ?></option>
-          <?php endwhile ?>
-        </select>
-      </div>
-      <!-- Impacto economico -->
-      <div class="form-group">
-        <label for="imp_eco">Impacto economico</label>
-        <select class="form-control" id="imp_eco" name="imp_eco">
-          <option selected>Escoger Impacto economico</option>
-          <?php while ($fila = mysql_fetch_assoc($imp_economico)) : ?>
-            <option value="<?php echo $fila["imec_id"] ?>"><?php echo $fila["imec_nombre"] ?></option>
-          <?php endwhile ?>
-        </select>
-      </div>
-      <!-- Impacto en las personas -->
-      <div class="form-group">
-        <label for="imp_per">Impacto en las personas</label>
-        <select class="form-control" id="imp_per" name="imp_per">
-          <option selected>Escoger Impacto en las personas</option>
-          <?php while ($fila = mysql_fetch_assoc($imp_personas)) : ?>
-            <option value="<?php echo $fila["impe_id"] ?>"><?php echo $fila["impe_nombre"] ?></option>
-          <?php endwhile ?>
-        </select>
-      </div>
-      <!-- Impacto al medio ambiente -->
-      <div class="form-group">
-        <label for="imp_med_amb">Impacto al medio ambiente</label>
-        <select class="form-control" id="imp_med_amb" name="imp_med_amb">
-          <option selected>Escoger Impacto en el medio ambiente</option>
-          <?php while ($fila = mysql_fetch_assoc($imp_ambiente)) : ?>
-            <option value="<?php echo $fila["imma_id"] ?>"><?php echo $fila["imma_nombre"] ?></option>
-          <?php endwhile ?>
-        </select>
       </div>
       <!-- Equipos -->
       <div class="form-group">
         <label for="equipos">Equipos</label>
         <select class="form-control" id="equipos" name="equipos">
-          <option selected>Escoger equpos</option>
+          <option selected disabled>Escoger equipos</option>
+          <option value="0">N/A</option>
           <?php while ($fila = mysql_fetch_assoc($equipos)) : ?>
             <option value="<?php echo $fila["equi_id"] ?>"><?php echo $fila["equi_nombre"] ?></option>
           <?php endwhile ?>
         </select>
       </div>
       <!-- Fecha de incidencia -->
-      <!-- <div class="form-group">
+      <div class="form-group">
         <label for="fecha_incidencia">Fecha de incidencia</label>
         <input type="date" class="form-control" id="fecha_incidencia" name="fecha_incidencia">
+      </div>
+      <!-- Frecuencia -->
+      <!-- <div class="form-group">
+        <label for="frecuencia">Frecuencia</label>
+        <select class="form-control" id="frecuencia" name="frecuencia">
+          <option selected>Escoger frecuencia</option>
+          <?php //while ($fila = mysql_fetch_assoc($frecuencia)) : 
+          ?>
+            <option value="<?php //echo $fila["cafr_id"] 
+                            ?>"><?php //echo $fila["cafr_nombre"] 
+                                                              ?></option>
+          <?php //endwhile 
+          ?>
+        </select>
       </div> -->
+      <!-- Seguridad operacional -->
+      <!-- <div class="form-group">
+        <label for="seg_op">Incidencia en la Seguridad Operacional</label>
+        <select class="form-control" id="seg_op" name="seg_op">
+          <option selected>Escoger Incidencia en la Seguridad Operacional</option>
+          <?php //while ($fila = mysql_fetch_assoc($inc_seg_op)) : 
+          ?>
+            <option value="<?php //echo $fila["inso_id"] 
+                            ?>"><?php //echo $fila["inso_nombre"] 
+                                                              ?></option>
+          <?php //endwhile 
+          ?>
+        </select>
+      </div> -->
+      <!-- Inicidencia de procesos -->
+      <!-- <div class="form-group">
+        <label for="procesos">Incidencia en los procesos</label>
+        <select class="form-control" id="procesos" name="procesos">
+          <option selected>Escoger Incidencia de procesos</option>
+          <?php //while ($fila = mysql_fetch_assoc($inc_procesos)) : 
+          ?>
+            <option value="<?php //echo $fila["inpr_id"] 
+                            ?>"><?php //echo $fila["inpr_nombre"] 
+                                                              ?></option>
+          <?php //endwhile 
+          ?>
+        </select>
+      </div> -->
+      <!-- Impacto Económico -->
+      <!-- <div class="form-group">
+        <label for="imp_eco">Impacto Económico</label>
+        <select class="form-control" id="imp_eco" name="imp_eco">
+          <option selected>Escoger Impacto Económico</option>
+          <?php //while ($fila = mysql_fetch_assoc($imp_Económico)) : 
+          ?>
+            <option value="<?php //echo $fila["imec_id"] 
+                            ?>"><?php //echo $fila["imec_nombre"] 
+                                                              ?></option>
+          <?php //endwhile 
+          ?>
+        </select>
+      </div> -->
+      <!-- Impacto en las personas -->
+      <!-- <div class="form-group">
+        <label for="imp_per">Impacto en las personas</label>
+        <select class="form-control" id="imp_per" name="imp_per">
+          <option selected>Escoger Impacto en las personas</option>
+          <?php //while ($fila = mysql_fetch_assoc($imp_personas)) : 
+          ?>
+            <option value="<?php //echo $fila["impe_id"] 
+                            ?>"><?php //echo $fila["impe_nombre"] 
+                                                              ?></option>
+          <?php //endwhile 
+          ?>
+        </select>
+      </div> -->
+      <!-- Impacto al medio ambiente -->
+      <!-- <div class="form-group">
+        <label for="imp_med_amb">Impacto al medio ambiente</label>
+        <select class="form-control" id="imp_med_amb" name="imp_med_amb">
+          <option selected>Escoger Impacto en el medio ambiente</option>
+          <?php //while ($fila = mysql_fetch_assoc($imp_ambiente)) : 
+          ?>
+            <option value="<?php //echo $fila["imma_id"] 
+                            ?>"><?php //echo $fila["imma_nombre"] 
+                                                              ?></option>
+          <?php //endwhile 
+          ?>
+        </select>
+      </div> -->
+
+
       <!-- Nota -->
       <div class="form-group">
         <label for="nota">Nota</label>
@@ -193,15 +237,24 @@ $equipos = mysql_query($stmt, $dbh);
       <!-- Seccion de clasificacion -->
       <label for="nota">Clasificacion del caso</label>
       <div class="input-group flex-column mb-3">
-        <?php while($fila = mysql_fetch_assoc($casos_clasificacion)):?>
+        <?php while ($fila = mysql_fetch_assoc($casos_clasificacion)) : ?>
           <div class="form-check">
-          <input class="form-check-input" type="radio" name="cacl_id" id="<?php echo $fila["cacl_nombre"]?>" value="<?php echo $fila["cacl_id"]?>">
-          <label class="form-check-label" for="<?php echo $fila["cacl_nombre"]?>">
-          <?php echo $fila["cacl_nombre"]?>
-          </label>
-        </div>
-        <?php endwhile?>
+            <input class="form-check-input" type="radio" name="cacl_id" id="<?php echo $fila["cacl_id"] ?>" value="<?php echo $fila["cacl_id"] ?>" onclick="mostrarSubclasificacion(<?php echo $fila['cacl_id'] ?>)">
+            <label class="form-check-label" for="<?php echo $fila["cacl_nombre"] ?>">
+              <?php echo $fila["cacl_nombre"] ?>
+            </label>
+            <!-- Seccion de subclasificacion -->
+            <div class="sucl" id="sucl_se<?php echo $fila['cacl_id'] ?>" style="display:none; margin:left;">
+              <label for="nota">Subclasificacion</label>
+              <div class="input-group flex-column mb-3">
+
+              </div>
+            </div>
+          </div>
+        <?php endwhile ?>
+        <div id="direccion-error"></div>
       </div>
+
       <!-- Archivos -->
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -213,7 +266,7 @@ $equipos = mysql_query($stmt, $dbh);
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary mt-3" onclick="registrarCaso()">Registrar caso</button>
+      <button type="submit" class="btn btn-primary mt-3">Registrar caso</button>
     </form>
 
   </div>
@@ -239,10 +292,105 @@ $equipos = mysql_query($stmt, $dbh);
 
         },
         success: (msg) => {
-          alert(msg)
+
+          console.log(msg);
+          alert("Mensaje enviado exitosamente");
         }
       })
+
     }
+
+    function mostrarSubclasificacion(cacl_id) {
+      // console.log("Clasificación seleccionada:", cacl_id);
+      $(".sucl").hide();
+
+      $.ajax({
+        url: "ajax/clasificacion.php",
+        method: "GET",
+        data: {
+          cacl_id: cacl_id,
+        },
+        success: res => {
+          // console.log("Respuesta del servidor:", res);
+          let datos = JSON.parse(res);
+          // console.log("Datos parseados:", datos);
+
+          let sucl_se = $("#sucl_se" + cacl_id);
+          sucl_se.empty();
+
+          // Iterar sobre los datos de las subclasificaciones y crear elementos HTML
+          datos.forEach(subclasificacion => {
+            let div = $("<div>").addClass("form-check");
+            let input = $("<input>").addClass("form-check-input").attr({
+              type: "radio",
+              name: "cacd_id",
+              id: "cacd_id" + subclasificacion.casu_id,
+              value: subclasificacion.casu_id
+            });
+            let label = $("<label>").addClass("form-check-label").attr({
+              for: "cacd_id" + subclasificacion.casu_id
+            }).text(subclasificacion.casu_descripcion);
+            div.append(input, label);
+            sucl_se.append(div);
+          });
+
+          // Mostrar el contenedor de subclasificación actual y ocultar los demás
+
+          sucl_se.show();
+        },
+        complete: () => {
+
+        },
+        error: function(xhr, status, error) {
+          console.error("Error al obtener las subclasificaciones:", status, error);
+        }
+      });
+    }
+
+    $("document").ready(function() {
+
+      $("#formulario").validate({
+
+        rules: {
+          descripcion: "required",
+          departamento: "required",
+          tipo: "required",
+          ubicacion: "required",
+          equipos: "required",
+          fecha_incidencia: "required",
+          nota: "required",
+          cacl_id: "required"
+        },
+        messages: {
+          descripcion: "<span style='color: red; font-size: smaller;'>Ingrese la descripcion </span>",
+          departamento: "<span style='color: red; font-size: smaller;'>Seleccione el departamento </span>",
+          tipo: "<span style='color: red; font-size: smaller;'> Seleccione el tipo de caso </span>",
+          ubicacion: "<span style='color: red; font-size: smaller;'>Ingrese la ubicación</span>",
+          equipos: "<span style='color: red; font-size: smaller;'>Seleccione el equipo</span>",
+          fecha_incidencia: "<span style='color: red; font-size: smaller;'>Seleccione la fecha</span>",
+          nota: "<span style='color: red; font-size: smaller;'>Ingrese la nota</span>",
+          cacl_id: "<span style='color: red; font-size: smaller;'>Seleccione la clasificación</span>"
+
+        },
+        errorPlacement: function(error, element) {
+          if (element.attr("name") == "cacl_id") {
+            error.appendTo("#direccion-error");
+          } else {
+            error.insertAfter(element);
+          }
+        },
+        submitHandler: function(form) {
+
+          // Envía el formulario después de mostrar el mensaje
+          registrarCaso();
+          // Aquí se ejecuta si el formulario es válido
+
+
+        }
+
+      });
+
+    });
   </script>
 
 </body>

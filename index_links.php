@@ -14,6 +14,9 @@
 <script src="jquery/ckeditor4.9.2/adapters/jquery.js"></script>
 <script src="jquery/uploader/jquery.form.min.js" type="text/javascript"></script>
 <script src="jquery/jquery.timepicker.js" type="text/javascript"></script>
+<script src="plugins/jquery-validation-1.19.5/dist/jquery.validate.min.js"></script>
+<script src="plugins/jquery-validation-1.19.5/dist/additional-methods.min.js"></script>
+
 <!-- Font Awesome -->
 <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
 <!-- Font Awesome -->

@@ -87,6 +87,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
    echo "Caso revisado";
 
+}elseif($_SERVER["REQUEST_METHOD"] == "PATCH"){
+   //VAMOS A ACTUALIZAR EL ESTADO DEL CASO A CERRADO
+   $_PATCH = json_decode(file_get_contents("php://input"), true);
+
+   $caso_id = $_PATCH["id"];
+
+   $sql = "UPDATE casos 
+   SET caes_id = 2
+   WHERE caso_id = $caso_id";
+   mysql_query($sql);
+
+   echo json_encode([
+      "success" => true
+   ]);
 }
 
 

@@ -270,7 +270,7 @@
 
 
       <span>
-        <?php echo catalogo('usuarios', 'Usuario asignado', 'usua_nombre', 'f_usua_id_asignado', 'usua_id', 'usua_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
+        <?php echo catalogo('usuarios', 'Responsable de acciones', 'usua_nombre', 'f_usua_id_asignado', 'usua_id', 'usua_nombre', '0', '1', '180', "", "", "", "", "1"); ?>
       </span>
 
 

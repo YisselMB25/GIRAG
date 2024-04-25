@@ -68,14 +68,14 @@ include('seguridad.php');
 			if(strlen($incl)>0)
 			{
 			include("$incl" . ".php");
-			}
+			}else
 		   ?>
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
 
       <footer class="main-footer">
         <div class="float-right d-none d-sm-inline-block">
-          <b>Version AdminLTE</b> 3.0.0
+          <b>Grupo ITEMU</b>
         </div>
         <strong>
       </footer>
@@ -94,8 +94,7 @@ include('seguridad.php');
 	</script>
 	<!-- Bootstrap 4 -->
 	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<!-- ChartJS -->
-	<script src="plugins/chart.js/Chart.min.js"></script>
+
 	<!-- Sparkline -->
 	<script src="plugins/sparklines/sparkline.js"></script>
 	<!-- JQVMap -->
@@ -116,7 +115,6 @@ include('seguridad.php');
 	<script src="plugins/fastclick/fastclick.js"></script>
 	<!-- AdminLTE App -->
 	<script src="dist/js/adminlte.js"></script>
-	
 	<!-- Toastr -->
 	<link href="jquery/toastr.css" rel="stylesheet"/>
 	<script src="jquery/toastr.js"></script>

@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 
 header("Cache-Control: no-store, no-cache, must-revalidate"); // HTTP/1.1
@@ -92,7 +94,7 @@ $error="Error en login";
 
 <head>
 
-<link rel="stylesheet" href="http://gruposiuma.e-arhu.com/login_style.css?nch=2co<?php echo date('Ymd');?>" type="text/css" media="screen" />
+<link rel="stylesheet" href="https://giraglogic.girag.aero/login_style.css?nch=2co<?php echo date('Ymd');?>" type="text/css" media="screen" />
 
 <link href="jquery/jquery-ui.css" rel="stylesheet" type="text/css"/>
 
@@ -108,7 +110,7 @@ $error="Error en login";
 
 </head>
 
-<body style="background-image:url('http://gruposiuma.e-arhu.com/imagenes/bg.png?nch=2co<?php echo date('Ymd');?>'); background-size: 100%;-webkit-background-size: cover;
+<body style="background-image:url('https://giraglogic.girag.aero/imagenes/bg.png?nch=2co<?php echo date('Ymd');?>'); background-size: 100%;-webkit-background-size: cover;
 
   -moz-background-size: cover;
 
@@ -130,7 +132,12 @@ $error="Error en login";
 
     <div id="contenedor">
 
-	<div id="contenedor_logo"></div>
+	  <div id="contenedor_logo"></div>
+    <style>
+      #contenedor_logo img{
+        width: 200px;
+      }
+    </style>
 
       <div id="contenedor_Login">
 

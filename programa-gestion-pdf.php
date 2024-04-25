@@ -28,17 +28,15 @@ a.*,
 b.catb_avance,
 (SELECT usua_nombre FROM usuarios WHERE usua_id = a.usua_id) AS responsable_tarea
 FROM casos_tareas a
-INNER JOIN casos_tareas_bitacora b ON a.cate_id = b.cate_id
 INNER JOIN (
-SELECT
+SELECT 
     cate_id,
-    MAX(catb_fecha) AS ultima_fecha_avance
-FROM
-    casos_tareas_bitacora
-GROUP BY
-    cate_id
-) ultimos_avances ON b.cate_id = ultimos_avances.cate_id AND b.catb_fecha = ultimos_avances.ultima_fecha_avance
-WHERE caso_id = $caso_id";
+    MAX(catb_id) AS ultimo_catb_id
+FROM casos_tareas_bitacora
+GROUP BY cate_id
+) ultimos_avances ON a.cate_id = ultimos_avances.cate_id
+INNER JOIN casos_tareas_bitacora b ON ultimos_avances.cate_id = b.cate_id AND ultimos_avances.ultimo_catb_id = b.catb_id
+WHERE a.caso_id = $caso_id";
 $res = mysql_query($stmt);
 
 // echo "Tareas";
@@ -76,7 +74,7 @@ $plantilla = str_replace("[RESPONSABLE]", $caso_detalles["responsable_programa"]
 $plantilla = str_replace("[TABLA_TAREAS]", $descri_html, $plantilla);
 
 // Promedio de avances
-$total = (($promedio/ ($i*100)) * 100);
+$total = $i > 0 ? (($promedio/ ($i*100)) * 100) : 0;
 $plantilla = str_replace("[AVANCE_TOTAL_TAREAS]", $total, $plantilla);
 
 // print_r($plantilla);

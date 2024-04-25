@@ -69,22 +69,15 @@ text-align:center; /*Este es el truco para I.E. */
 #contenedor_logo
 
 {
-
+    width: 300px;
+    height: 200px;
     background-image: url("https://giraglogic.girag.aero/img/Girag.png");
     background-repeat: no-repeat;
-
+    background-size: cover;
     margin-left: 5px;
-
-    width: 300px;
-
-    height: 100px;
-
     margin-top: auto;
-
     margin-bottom: auto;
-
     float:left;
-
 }
 
 
