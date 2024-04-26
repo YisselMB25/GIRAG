@@ -36,7 +36,7 @@ switch ($_SERVER["REQUEST_METHOD"]) {
             redo_titulo, 
             redo_descripcion, 
             usua_id_gerente_departamento, 
-            rede_id, 
+           
             depa_id,
             redg_id
             )
@@ -45,7 +45,7 @@ switch ($_SERVER["REQUEST_METHOD"]) {
                '$titulo',
                '$descripcion',
                '$usuaIdGerente',
-               '$redeId',
+             
                '$depaId',
                '$redgId'
             )";
@@ -71,13 +71,13 @@ switch ($_SERVER["REQUEST_METHOD"]) {
             if (move_uploaded_file($_FILES["documento"]["tmp_name"], "../manuales-uso/" . $manualReferencia)) {
 
                $sql = "INSERT INTO reportes_documentos_bitacora(
-               redb_comentario, 
+               
                redb_ref,
                redb_fecha,
                redo_id)
                
                VALUES(
-                  '$comentario', 
+                  
                   '$manualReferencia', 
                   now(), 
                   '$lastIdReporte'

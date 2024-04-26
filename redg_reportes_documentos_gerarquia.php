@@ -350,7 +350,7 @@ $usuario_id = mysql_query($sql);
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Agregar Reporte</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -408,7 +408,7 @@ $usuario_id = mysql_query($sql);
 
           <!-- Id del detalle -->
 
-          <div class="form-group">
+          <!-- <div class="form-group">
 
             <label for="rede_id"> Estado</label>
 
@@ -429,7 +429,7 @@ $usuario_id = mysql_query($sql);
             </select>
 
           </div>
-
+ -->
 
 
           <!-- Id del departamento -->
@@ -464,7 +464,7 @@ $usuario_id = mysql_query($sql);
 
           <!-- Comentario-->
 
-          <div class="form-group">
+          <!-- <div class="form-group">
 
             <label for="comentario"> Comentario</label>
 
@@ -472,7 +472,7 @@ $usuario_id = mysql_query($sql);
 
 
 
-          </div>
+          </div> -->
 
 
 
