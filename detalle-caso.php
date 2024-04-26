@@ -392,6 +392,8 @@ $users = mysql_query($stmt, $dbh);
          data: datos,
          success: res => {
             console.log(res);
+         }, 
+         complete: () => {
             getDocsTask(taskIdInput.val())
          }
       })
@@ -586,7 +588,7 @@ $users = mysql_query($stmt, $dbh);
                         <a target='_blank' class="btn btn-info" href="img/casos_docs/${e.cado_ref}"">
                         <i class="fa-solid fa-eye"></i>
                         </a>
-                        <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocTask(${e.cado_id})'>
+                        <button class="text-white btn btn-danger btn-doc-delete" onclick='deleteDocCaso(${e.cado_id})'>
                               <i class="fa-solid fa-trash"></i>
                               </button>
                         </div>
@@ -643,11 +645,12 @@ $users = mysql_query($stmt, $dbh);
          },
          complete: () => {
             getDocsTask(taskIdInput.val())
+            getDocTaskGenerals(taskIdInput.val())
          }
       })
    }
 
-   // Funcion que elimina un doc especifico mediante parametro-----------------------------------
+   // Funcion que elimina un doc especifico mediante parametro de una tarea-----------------------------------
    function deleteDocTask(doc_id) {
       $.ajax({
          type: "DELETE",
@@ -661,6 +664,7 @@ $users = mysql_query($stmt, $dbh);
          },
          complete: () => {
             getDocsTask(taskIdInput.val())
+            getDocTaskGenerals(taskIdInput.val())
          }
       })
    }

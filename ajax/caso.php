@@ -34,15 +34,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
          $nombre = $_FILES["new_docs"]["name"][$key];
          $ref = time() . "-" . $_FILES["new_docs"]["name"][$key];
          $caso_id = $_POST['caso_id'];
+
+         if(move_uploaded_file($_FILES["new_docs"]["tmp_name"][$key], "../img/casos_docs/".$ref)){
+            
+            $stmt = "INSERT INTO casos_documentos(cado_nombre, caso_id, cado_ref) VALUES('$nombre', '$caso_id', '$ref')";
+            $res = mysql_query($stmt);
+            if(!mysql_error()){
+               echo "Subido correctamente $nombre";
+            }
+         }else{
+            http_response_code(400);
+            echo "ERROR AL GUARDAR EL ARCHIVO $nombre";
+         }
          
-         $stmt = "INSERT INTO casos_documentos(cado_nombre, caso_id, cado_ref) VALUES('$nombre', '$caso_id', '$ref')";
-         $res = mysql_query($stmt);
-         
-         move_uploaded_file($_FILES["new_docs"]["tmp_name"][$key], "../img/casos_docs/".$ref);
-         
-      }
-      if(!mysql_error()){
-         echo "Subido correctamente";
       }
    }else{
       echo "Error";
